@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+
 import {
   IonContent,
   IonItem,
@@ -31,6 +33,16 @@ import {
   ]
 })
 export class LoginPage implements OnInit {
-  constructor() {}
+  constructor(private router: Router) {}
   ngOnInit() {}
+
+  onLogin(tipo: 'aluno' | 'professor') {
+    this.router.navigate(['/agenda'], {
+      queryParams: { role: tipo }
+    });
+  }
 }
+
+
+
+

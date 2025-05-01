@@ -1,0 +1,17 @@
+.agenda-container {
+    --background: #f2f2f2;
+  
+    .top-info {
+      text-align: center;
+      padding: 10px;
+      font-weight: bold;
+    }
+  
+    ion-item {
+      margin: 8px 16px;
+      border-radius: 10px;
+      --background: white;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+  }
+  

@@ -10,4 +10,9 @@ export const routes: Routes = [
     redirectTo: 'login',
     pathMatch: 'full',
   },
+  {
+    path: 'agenda',
+    loadComponent: () =>
+      import('./pages/agenda/agenda.page').then(m => m.AgendaPage)
+  }
 ];
