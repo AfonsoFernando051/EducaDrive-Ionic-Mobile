@@ -1,0 +1,15 @@
+<ion-tabs>
+  <ion-tab-bar slot="bottom">
+    <ion-tab-button tab="agenda" [routerLink]="['/tabs/agenda']">
+      <ion-icon name="calendar"></ion-icon>
+      <ion-label>Agenda</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="config" [routerLink]="['/tabs/config']">
+      <ion-icon name="settings"></ion-icon>
+      <ion-label>Configurações</ion-label>
+    </ion-tab-button>
+  </ion-tab-bar>
+</ion-tabs>
+
+<router-outlet></router-outlet>

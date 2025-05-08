@@ -37,7 +37,7 @@ export class LoginPage implements OnInit {
   ngOnInit() {}
 
   onLogin(tipo: 'aluno' | 'professor') {
-    this.router.navigate(['/agenda'], {
+    this.router.navigate(['/tabs'], {
       queryParams: { role: tipo }
     });
   }
