@@ -6,7 +6,6 @@ import {
   IonItem,
   IonList,
   IonLabel,
-  IonButton,
   IonCard,
   IonCardContent
 } from '@ionic/angular/standalone';
@@ -22,7 +21,6 @@ import {
     IonItem,
     IonList,
     IonLabel,
-    IonButton,
     IonCard,
     IonCardContent
   ]

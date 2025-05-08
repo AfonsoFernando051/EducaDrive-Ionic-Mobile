@@ -1,20 +1,49 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar } from '@ionic/angular/standalone';
+import {
+  IonIcon,
+  IonCard,
+  IonCardContent,
+  IonContent,
+  IonItem,
+  IonLabel,
+  IonInput,
+  IonButton,
+  IonGrid,
+  IonRow,
+  IonCol,
+  IonSelect,
+  IonSelectOption
+} from '@ionic/angular/standalone';
+
+
 
 @Component({
   selector: 'app-config',
+  standalone: true,
   templateUrl: './config.page.html',
   styleUrls: ['./config.page.scss'],
-  standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
+  imports: [
+    IonIcon,
+    IonCard,
+    IonCardContent,
+    IonContent,
+    IonItem,
+    IonLabel,
+    IonInput,
+    IonButton,
+    IonGrid,
+    IonRow,
+    IonCol,
+    IonSelect,
+    IonSelectOption
+  ]
 })
-export class ConfigPage implements OnInit {
+export class ConfigPage {
+  constructor(private router: Router) {}
 
-  constructor() { }
-
-  ngOnInit() {
+  logout() {
+    this.router.navigate(['/login']);
   }
-
 }

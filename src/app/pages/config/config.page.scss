@@ -1,0 +1,126 @@
+.agenda-container {
+    --background: #f0f0f0;
+  
+    .top-info {
+      background-color: #d9d9d9;
+      padding: 12px;
+      border-radius: 10px;
+      margin: 12px;
+  
+      .user-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+  
+        .avatar {
+          width: 50px;
+          height: 50px;
+          border-radius: 50%;
+          border: 2px solid #000;
+        }
+  
+        .user-info {
+          flex: 1;
+  
+          .user-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+  
+            .username {
+              margin: 0;
+              font-size: 1.1rem;
+              font-weight: 500;
+            }
+  
+            ion-icon {
+              font-size: 1.2rem;
+            }
+          }
+  
+          .user-id {
+            width: 80%;
+            height: 12px;
+            background-color: #000;
+            border-radius: 20px;
+            margin: 6px 0;
+          }
+  
+          .date-picker {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.95rem;
+            color: #333;
+          }
+        }
+      }
+  
+      hr {
+        margin-top: 12px;
+        border: none;
+        border-top: 1px solid #555;
+      }
+    }
+  
+    .agenda-list {
+      margin-top: 12px;
+  
+      .agenda-item {
+        margin: 10px;
+        border-radius: 10px;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  
+        .nome {
+          font-size: 1rem;
+          margin: 0;
+        }
+  
+        .status {
+          font-size: 0.9rem;
+          color: #444;
+        }
+  
+        .hora {
+          font-weight: bold;
+          font-size: 0.9rem;
+        }
+      }
+    }
+  
+    .footer-actions {
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+    }
+  }
+  
+  .avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    margin-right: 12px;
+    object-fit: cover;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+    border: 0.1px solid white;
+    flex-shrink: 0;
+  }
+  
+  ion-card {
+    border-radius: 12px;
+  }
+  
+  ion-label {
+    font-weight: 500;
+  }
+  
+  h2 {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+
+  .input-small::part(native-input) {
+    font-size: 14px; // ou o tamanho que preferir
+  }
+  
