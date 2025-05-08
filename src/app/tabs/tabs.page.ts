@@ -5,8 +5,7 @@ import {
   IonTabs,
   IonTabBar,
   IonTabButton,
-  IonLabel,
-  IonIcon
+  IonLabel
 } from '@ionic/angular/standalone';
 
 @Component({
@@ -20,8 +19,7 @@ import {
     IonTabs,
     IonTabBar,
     IonTabButton,
-    IonLabel,
-    IonIcon
+    IonLabel
   ]
 })
 export class TabsPage {}
