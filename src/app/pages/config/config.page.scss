@@ -120,6 +120,11 @@
     margin-bottom: 0.5rem;
   }
 
+  .placeholder{
+    font-size: 0.9rem;
+    margin: 12px;
+    align-items: center;
+  }
   .input-small::part(native-input) {
     font-size: 14px; // ou o tamanho que preferir
   }
