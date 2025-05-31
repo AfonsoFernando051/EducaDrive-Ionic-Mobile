@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute,Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import {
   IonContent,
@@ -29,7 +29,7 @@ export class AgendaPage implements OnInit {
   role: 'aluno' | 'professor' = 'aluno';
   agendaItems: { nome: string; hora: string; status: string; cor: string; imagem: string }[] = [];
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(private route: ActivatedRoute, private router: Router) {}
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
@@ -69,5 +69,9 @@ export class AgendaPage implements OnInit {
             }
           ];
     });
+  }
+
+   logout() {
+    this.router.navigate(['/login']);
   }
 }
