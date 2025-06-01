@@ -8,9 +8,11 @@ import { AppComponent } from './app/app.component';
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { environment } from './environments/environment';
+import { getFirestore } from 'firebase/firestore';
 
 const firebaseApp = initializeApp(environment.firebaseConfig);
 export const auth = getAuth(firebaseApp);
+export const db = getFirestore(firebaseApp);
 
 bootstrapApplication(AppComponent, {
   providers: [
