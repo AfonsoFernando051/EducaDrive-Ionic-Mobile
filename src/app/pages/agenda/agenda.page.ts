@@ -9,6 +9,7 @@ import {
   IonCard,
   IonCardContent
 } from '@ionic/angular/standalone';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   standalone: true,
@@ -29,7 +30,8 @@ export class AgendaPage implements OnInit {
   role: 'aluno' | 'professor' = 'aluno';
   agendaItems: { nome: string; hora: string; status: string; cor: string; imagem: string }[] = [];
 
-  constructor(private route: ActivatedRoute, private router: Router) {}
+  constructor(private route: ActivatedRoute, private router: Router,  private authService: AuthService
+) {}
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
@@ -71,7 +73,14 @@ export class AgendaPage implements OnInit {
     });
   }
 
-   logout() {
+  async logout() {
+  try {
+    await this.authService.logout();
     this.router.navigate(['/login']);
+    alert('Você saiu com sucesso!');
+  } catch (error: any) {
+    alert('Erro ao sair: ' + error.message);
   }
+}
+
 }

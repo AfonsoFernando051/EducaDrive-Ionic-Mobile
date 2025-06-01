@@ -14,6 +14,8 @@ import {
   IonFooter
 } from '@ionic/angular/standalone';
 
+import { AuthService } from '../../services/auth.service';
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
@@ -33,16 +35,23 @@ import {
   ]
 })
 export class LoginPage implements OnInit {
-  constructor(private router: Router) {}
+  email = '';
+  senha = '';
+
+  constructor(private router: Router, private authService: AuthService) {}
+
   ngOnInit() {}
 
-  onLogin(tipo: 'aluno' | 'professor') {
-    this.router.navigate(['/tabs'], {
-      queryParams: { role: tipo }
-    });
+  async onLogin(tipo: 'aluno' | 'professor') {
+    try {
+      const user = await this.authService.login(this.email, this.senha);
+      console.log('Usuário autenticado:', user);
+      // Redireciona após login bem-sucedido
+      this.router.navigate(['/tabs'], {
+        queryParams: { role: tipo }
+      });
+    } catch (error: any) {
+      alert('Erro ao fazer login: ' + error.message);
+    }
   }
 }
-
-
-
-
