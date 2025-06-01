@@ -1,10 +1,10 @@
 <ion-content class="agenda-container" fullscreen>
   <div class="top-info">
     <div class="user-header">
-      <img src="assets/photo/avatar.png" alt="avatar" class="avatar" />
+      <img src="{{photoURL}}" alt="avatar" class="avatar" />
       <div class="user-info">
         <div class="user-top">
-          <h3 class="username">Cristiane Santos</h3>
+          <h3 class="username">{{ name }}</h3>
           <img src="assets/icon/enter-sharp.png" alt="calendar" class="calendar" (click)="logout()" />
         </div>
         <div class="user-id"></div>

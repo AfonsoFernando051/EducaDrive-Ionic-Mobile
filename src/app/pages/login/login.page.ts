@@ -63,9 +63,15 @@ export class LoginPage implements OnInit {
         console.log('Role do usuário:', role);
 
         // Redireciona baseado no papel
-        this.router.navigate(['/tabs'], {
-          queryParams: { role }
-        });
+       this.router.navigate(['/tabs/agenda'], {
+        queryParams: {
+          role: profile.role,
+          name: profile.name,
+          email: profile.email,
+          photoURL: profile.photoURL
+        }
+});
+
       } else {
         alert('Perfil não encontrado no banco.');
       }

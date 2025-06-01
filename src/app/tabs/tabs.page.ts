@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import {
@@ -7,6 +7,7 @@ import {
   IonTabButton,
   IonLabel
 } from '@ionic/angular/standalone';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-tabs',
@@ -22,4 +23,23 @@ import {
     IonLabel
   ]
 })
-export class TabsPage {}
+
+export class TabsPage implements OnInit {
+  role = '';
+  name = '';
+  email = '';
+  photoURL = '';
+
+  constructor(private route: ActivatedRoute) {}
+
+  ngOnInit() {
+    this.route.queryParams.subscribe(params => {
+      this.role = params['role'];
+      this.name = params['name'];
+      this.email = params['email'];
+      this.photoURL = params['photoURL'];
+
+      console.log('Dados recebidos:', this.role, this.name, this.email, this.photoURL);
+    });
+  }
+}
