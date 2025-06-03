@@ -1,27 +1,39 @@
 <ion-content class="agenda-container" fullscreen>
   <div class="top-info">
     <div class="user-header">
-      <img src="{{photoURL}}" alt="avatar" class="avatar" />
+      <img [src]="photoURL" alt="avatar" class="avatar" />
       <div class="user-info">
         <div class="user-top">
           <h3 class="username">{{ name }}</h3>
-          <img src="assets/icon/enter-sharp.png" alt="calendar" class="calendar" (click)="logout()" />
+          <ion-button fill="clear" (click)="logout()">
+            <ion-icon name="log-out-outline"></ion-icon>
+          </ion-button>
         </div>
-        <div class="user-id"></div>
+
         <div class="date-picker">
           <span>Selecione uma data:</span>
-          <img src="assets/icon/calendar.png" alt="calendar" class="calendar" />
+          <ion-button fill="clear" (click)="showDatePicker = true" class="calendar-button">
+            <img src="assets/icon/calendar.png" alt="calendar" class="calendar" />
+          </ion-button>
         </div>
       </div>
     </div>
     <hr />
   </div>
 
+  <!-- Date Picker -->
+  <ion-datetime
+    *ngIf="showDatePicker"
+    presentation="date"
+    (ionChange)="onDateSelected($event)"
+    (ionCancel)="showDatePicker = false"
+  ></ion-datetime>
+
   <ion-card class="login-card">
     <ion-card-content>
       <ion-list class="agenda-list">
-       <ion-item *ngFor="let item of agendaItems" class="agenda-item" [color]="item.cor">
-        <img src="assets/photo/avatar.png" alt="avatar" class="avatar" />
+        <ion-item *ngFor="let item of agendaItems" class="agenda-item" [color]="item.cor">
+          <img [src]="item.imagem" alt="avatar" class="avatar" />
           <ion-label>
             <h3 class="nome">{{ item.nome }}</h3>
             <p class="status">{{ item.status }}</p>
