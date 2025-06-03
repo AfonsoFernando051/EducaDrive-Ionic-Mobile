@@ -13,6 +13,7 @@ import {
 import { AuthService } from '../../services/auth.service';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../../../main';
+import { UserService } from '../../services/user.service';
 
 @Component({
   standalone: true,
@@ -42,21 +43,25 @@ export class AgendaPage implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private userService: UserService
   ) {}
 
-  ngOnInit() {
-    this.route.queryParams.subscribe(async params => {
-      this.role = params['role'] || 'aluno';
-      this.name = params['name'] || 'Usuário';
-      this.email = params['email'] || '';
-      this.photoURL = params['photoURL'] || 'assets/photo/avatar.png';
-
-      console.log('Dados recebidos:', this.role, this.name, this.email, this.photoURL);
-
-      await this.loadAgendaItems();
-    });
+async ngOnInit() {
+  const profile = await this.userService.loadUserProfileFromStorage();
+  if (profile) {
+    console.log('Dados do usuário carregados do storage:', profile);
+    this.role = profile['role'] || 'aluno';
+    this.name = profile['name'] || 'Usuário';
+    this.email = profile['email'] || '';
+    this.photoURL = profile['photoURL'] || 'assets/photo/avatar.png';
+    this.loadAgendaItems();
+  } else {
+    console.warn('Nenhum perfil encontrado no storage (usuário não logado?)');
+    this.router.navigate(['/login']);
   }
+}
+
 
   async loadAgendaItems() {
     this.isLoading = true;

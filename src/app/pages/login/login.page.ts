@@ -18,6 +18,7 @@ import {
 import { AuthService } from '../../services/auth.service';
 import { getDoc, doc } from 'firebase/firestore';
 import { auth, db } from '../../../main';
+import { UserService } from '../../services/user.service';
 
 interface UserProfile {
   name: string;
@@ -48,7 +49,11 @@ export class LoginPage implements OnInit {
   email = '';
   senha = '';
 
-  constructor(private router: Router, private authService: AuthService) {}
+  constructor(
+  private router: Router,
+  private authService: AuthService,
+  private userService: UserService
+) {}
 
   ngOnInit() {}
 
@@ -59,17 +64,9 @@ export class LoginPage implements OnInit {
 
       const profile = await this.getUserProfileByUid(user.uid);
       if (profile) {
-        const role = profile.role;
-        console.log('Role do usuário:', role);
-
-        // Redireciona baseado no papel
+        await this.userService.setUserProfile(profile);
        this.router.navigate(['/tabs/agenda'], {
-        queryParams: {
-          role: profile.role,
-          name: profile.name,
-          email: profile.email,
-          photoURL: profile.photoURL
-        }
+       
 });
 
       } else {

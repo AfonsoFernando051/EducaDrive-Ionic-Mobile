@@ -1,35 +1,37 @@
 import { Injectable } from '@angular/core';
+import { Storage } from '@ionic/storage-angular';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  private userData: {
-    uid: string;
-    name: string;
-    email: string;
-    photoURL: string;
-    role: 'aluno' | 'professor';
-  } | null = null;
+  private userProfile: any = null;
 
-  constructor() {}
-
-  setUser(data: {
-    uid: string;
-    name: string;
-    email: string;
-    photoURL: string;
-    role: 'aluno' | 'professor';
-  }) {
-    this.userData = data;
+  constructor(private storage: Storage) {
+    this.init();
   }
 
-  getUser() {
-    return this.userData;
+  async init() {
+    await this.storage.create();
   }
 
-  clearUser() {
-    this.userData = null;
+  setUserProfile(profile: any) {
+    this.userProfile = profile;
+    this.storage.set('userProfile', profile);
+  }
+
+  getUserProfile(): any {
+    return this.userProfile;
+  }
+
+  async loadUserProfileFromStorage() {
+    const storedProfile = await this.storage.get('userProfile');
+    this.userProfile = storedProfile;
+    return storedProfile;
+  }
+
+  clearUserProfile() {
+    this.userProfile = null;
+    this.storage.remove('userProfile');
   }
 }
-

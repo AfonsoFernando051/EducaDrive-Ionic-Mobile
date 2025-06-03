@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import {
   IonIcon,
@@ -17,6 +17,7 @@ import {
   IonSelectOption,
   IonSpinner
 } from '@ionic/angular/standalone';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-config',
@@ -48,23 +49,26 @@ export class ConfigPage implements OnInit {
   photoURL = '';
   role: 'aluno' | 'professor' = 'aluno';
 
-  constructor(private route: ActivatedRoute, private router: Router) {}
+  constructor(private router: Router, private userService: UserService) {}
 
-  ngOnInit() {
-    this.route.queryParams.subscribe(params => {
-      this.role = params['role'] || 'aluno';
-      this.name = params['name'] || 'Usuário';
-      this.email = params['email'] || '';
-      this.photoURL = params['photoURL'] || 'assets/photo/avatar.png';
-
-      console.log('Config Page - Dados recebidos:', this.role, this.name, this.email, this.photoURL);
-    });
+  async ngOnInit() {
+    const profile = await this.userService.loadUserProfileFromStorage();
+    if (profile) {
+      console.log('Config Page - Perfil carregado:', profile);
+      this.role = profile.role || 'aluno';
+      this.name = profile.name || 'Usuário';
+      this.email = profile.email || '';
+      this.photoURL = profile.photoURL || 'assets/photo/avatar.png';
+    } else {
+      console.warn('Nenhum perfil encontrado (usuário não logado?)');
+      this.router.navigate(['/login']);
+    }
   }
 
   async logout() {
     this.isLoading = true;
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulação de espera
+      await this.userService.clearUserProfile();  // limpa memória + storage
       this.router.navigate(['/login']);
       alert('Você saiu com sucesso!');
     } catch (error: any) {
@@ -77,7 +81,16 @@ export class ConfigPage implements OnInit {
   async saveChanges() {
     this.isLoading = true;
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulação de salvamento
+      const updatedProfile = {
+        name: this.name,
+        email: this.email,
+        photoURL: this.photoURL,
+        role: this.role
+      };
+
+      this.userService.setUserProfile(updatedProfile);  // atualiza memória + storage
+
+      // Aqui você pode adicionar também lógica para salvar no Firestore se quiser
       alert('Alterações salvas com sucesso!');
     } catch (error: any) {
       alert('Erro ao salvar alterações: ' + error.message);

@@ -9,6 +9,7 @@ import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { environment } from './environments/environment';
 import { getFirestore } from 'firebase/firestore';
+import { IonicStorageModule } from '@ionic/storage-angular';
 
 const firebaseApp = initializeApp(environment.firebaseConfig);
 export const auth = getAuth(firebaseApp);
@@ -19,5 +20,6 @@ bootstrapApplication(AppComponent, {
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     provideIonicAngular(),
     provideRouter(routes, withPreloading(PreloadAllModules)),
+    ...(IonicStorageModule.forRoot().providers || []),  // ✅ safe spread
   ],
 });
