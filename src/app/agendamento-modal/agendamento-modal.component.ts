@@ -1,15 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, inject, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import {
-  IonButton,
-  IonInput,
-  IonItem,
-  IonLabel,
-  IonSelect,
-  IonSelectOption,
-  ModalController
-} from '@ionic/angular';
+import { IonicModule, ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-agendamento-modal',
@@ -19,13 +11,9 @@ import {
   imports: [
     CommonModule,
     FormsModule,
-    IonButton,
-    IonInput,
-    IonItem,
-    IonLabel,
-    IonSelect,
-    IonSelectOption
-  ]
+    IonicModule  // ✅ garante ModalController e todos os ion-*
+  ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AgendamentoModalComponent {
   @Input() date: string = '';
@@ -34,7 +22,7 @@ export class AgendamentoModalComponent {
   horario: string = '';
   status: string = 'confirmado';
 
-  constructor(private modalCtrl: ModalController) {}
+  private modalCtrl = inject(ModalController);
 
   confirmar() {
     if (!this.horario) {

@@ -5,7 +5,7 @@
       <div class="user-info">
         <div class="user-top">
           <h3 class="username">{{ name }}</h3>
-                      <img src="assets/icon/enter-sharp.png" alt="calendar" class="calendar" (click)="logout()" />
+          <img src="assets/icon/enter-sharp.png" alt="logout" class="calendar" (click)="logout()" />
         </div>
 
         <div class="date-picker">
@@ -40,7 +40,7 @@
             <ion-button
               *ngIf="role === 'aluno' && item.status === 'Disponível'"
               size="small"
-              (click)="marcarAula(item.id)"
+              (click)="abrirModal(item.id)"
             >
               Marcar
             </ion-button>

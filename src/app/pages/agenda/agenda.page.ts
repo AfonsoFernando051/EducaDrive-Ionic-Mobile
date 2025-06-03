@@ -11,12 +11,14 @@ import {
   IonSpinner,
   IonButton,
   IonIcon,
-  IonDatetime
+  IonDatetime,
+  ModalController
 } from '@ionic/angular/standalone';
 import { AuthService } from '../../services/auth.service';
 import { collection, query, where, getDocs, addDoc, deleteDoc, doc } from 'firebase/firestore';
 import { db } from '../../../main';
 import { UserService } from '../../services/user.service';
+import { AgendamentoModalComponent } from 'src/app/agendamento-modal/agendamento-modal.component';
 
 interface User {
   uid: string;
@@ -27,6 +29,7 @@ interface User {
 
 interface Aula {
   date: string;
+  horario?: string;
   professorId: string;
   alunoId: string;
   status: string;
@@ -73,7 +76,8 @@ export class AgendaPage implements OnInit {
   constructor(
     private router: Router,
     private authService: AuthService,
-    private userService: UserService
+    private userService: UserService,
+    private modalCtrl: ModalController
   ) {}
 
   async ngOnInit() {
@@ -109,7 +113,6 @@ export class AgendaPage implements OnInit {
 
     try {
       if (this.role === 'aluno') {
-        // Aluno vê professores disponíveis
         const allProfQuery = query(collection(db, 'user'), where('papel', '==', 'professor'));
         const profSnap = await getDocs(allProfQuery);
 
@@ -133,7 +136,6 @@ export class AgendaPage implements OnInit {
           }
         });
       } else {
-        // Professor vê suas aulas
         const aulasQuery = query(collection(db, 'agenda'),
           where('date', '==', this.selectedDate),
           where('professorId', '==', this.uid),
@@ -164,15 +166,35 @@ export class AgendaPage implements OnInit {
     }
   }
 
-  async marcarAula(professorId: string) {
+  async abrirModal(professorId: string) {
+    const modal = await this.modalCtrl.create({
+      component: AgendamentoModalComponent,
+      componentProps: {
+        date: this.selectedDate,
+        alunoName: this.name
+      }
+    });
+
+    modal.onDidDismiss().then(result => {
+      if (result.role === 'confirm') {
+        const { horario, status } = result.data;
+        this.marcarAula(professorId, horario, status);
+      }
+    });
+
+    await modal.present();
+  }
+
+  async marcarAula(professorId: string, horario: string, status: string) {
     if (!this.selectedDate || !this.uid) return;
 
     try {
       await addDoc(collection(db, 'agenda'), {
         date: this.selectedDate,
+        horario: horario,
         professorId: professorId,
         alunoId: this.uid,
-        status: 'confirmado'
+        status: status
       });
       alert('Aula marcada!');
       this.loadAgendaItems();
