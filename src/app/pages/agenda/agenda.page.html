@@ -5,13 +5,14 @@
       <div class="user-info">
         <div class="user-top">
           <h3 class="username">{{ name }}</h3>
-            <img src="assets/icon/enter-sharp.png" alt="calendar" class="calendar" (click)="logout()" />
+                      <img src="assets/icon/enter-sharp.png" alt="calendar" class="calendar" (click)="logout()" />
         </div>
 
         <div class="date-picker">
           <span>Selecione uma data:</span>
           <ion-button fill="clear" (click)="showDatePicker = true" class="calendar-button">
             <img src="assets/icon/calendar.png" alt="calendar" class="calendar" />
+            <span *ngIf="selectedDate">{{ selectedDate }}</span>
           </ion-button>
         </div>
       </div>
@@ -19,7 +20,6 @@
     <hr />
   </div>
 
-  <!-- Date Picker -->
   <ion-datetime
     *ngIf="showDatePicker"
     presentation="date"
@@ -36,7 +36,23 @@
             <h3 class="nome">{{ item.nome }}</h3>
             <p class="status">{{ item.status }}</p>
           </ion-label>
-          <div slot="end" class="hora">{{ item.hora }}</div>
+          <div slot="end">
+            <ion-button
+              *ngIf="role === 'aluno' && item.status === 'Disponível'"
+              size="small"
+              (click)="marcarAula(item.id)"
+            >
+              Marcar
+            </ion-button>
+            <ion-button
+              *ngIf="role === 'professor'"
+              size="small"
+              color="danger"
+              (click)="cancelarAula(item.id)"
+            >
+              Cancelar
+            </ion-button>
+          </div>
         </ion-item>
       </ion-list>
     </ion-card-content>
