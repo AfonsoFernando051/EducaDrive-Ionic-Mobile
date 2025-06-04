@@ -43,29 +43,30 @@ import { UserService } from '../../services/user.service';
   ]
 })
 export class ConfigPage implements OnInit {
-  isLoading = false;
+  role: 'aluno' | 'professor' = 'aluno';
+  uid = '';
   name = '';
   email = '';
   photoURL = '';
-  role: 'aluno' | 'professor' = 'aluno';
+  isLoading = false;
 
   constructor(private router: Router, private userService: UserService) {}
 
-  async ngOnInit() {
+    async ngOnInit() {
     const profile = await this.userService.loadUserProfileFromStorage();
     if (profile) {
-      console.log('Config Page - Perfil carregado:', profile);
-      this.role = profile.role || 'aluno';
-      this.name = profile.name || 'Usuário';
-      this.email = profile.email || '';
-      this.photoURL = profile.photoURL || 'assets/photo/avatar.png';
+      this.uid = profile['uid'];
+      this.role = profile['role'] || 'aluno';
+      this.name = profile['name'] || 'Usuário';
+      this.email = profile['email'] || '';
+      this.photoURL = profile['photoURL'] || 'assets/photo/avatar.png';
     } else {
-      console.warn('Nenhum perfil encontrado (usuário não logado?)');
+      console.warn('Nenhum perfil encontrado.');
       this.router.navigate(['/login']);
     }
   }
 
-  async logout() {
+   async logout() {
     this.isLoading = true;
     try {
       await this.userService.clearUserProfile();  // limpa memória + storage
