@@ -1,17 +1,13 @@
 <ion-content class="agenda-container" fullscreen>
-  <div class="top-info">
+ <div class="top-info">
     <div class="user-header">
-      <img src="{{photoURL}}" alt="avatar" class="avatar" />
+      <img [src]="photoURL" alt="avatar" class="avatar" />
       <div class="user-info">
         <div class="user-top">
           <h3 class="username">{{ name }}</h3>
-          <img src="assets/icon/enter-sharp.png" alt="calendar" class="calendar" (click)="logout()"/>
+          <img src="assets/icon/enter-sharp.png" alt="logout" class="calendar" (click)="logout()" />
         </div>
-        <div class="user-id"></div>
-        <div class="date-picker">
-          <span>Selecione uma data:</span>
-          <img src="assets/icon/calendar.png" alt="calendar" class="calendar" />
-        </div>
+
       </div>
     </div>
     <hr />
