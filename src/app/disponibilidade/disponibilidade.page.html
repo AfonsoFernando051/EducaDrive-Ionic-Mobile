@@ -21,15 +21,13 @@
 
         <ion-list>
           <ng-container *ngFor="let dia of diasSemana">
-            <!-- Checkbox do dia -->
             <ion-item>
-              <ion-label>{{ dia.label }}</ion-label>
+              <ion-label>{{ dia.dia }}</ion-label> <!-- Corrigido -->
               <ion-checkbox slot="end" [(ngModel)]="dia.selecionado"></ion-checkbox>
             </ion-item>
 
-            <!-- Horários se estiver selecionado -->
             <ion-item *ngIf="dia.selecionado" class="ion-padding-start">
-              <ion-label position="stacked">Horário de {{ dia.label }}</ion-label>
+              <ion-label position="stacked">Horário de {{ dia.dia }}</ion-label> <!-- Corrigido -->
               <ion-grid>
                 <ion-row>
                   <ion-col size="6">

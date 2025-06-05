@@ -2,20 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import {
-  IonIcon,
   IonCard,
   IonCardContent,
   IonContent,
   IonItem,
   IonLabel,
   IonInput,
-  IonButton,
-  IonGrid,
-  IonRow,
-  IonCol,
-  IonSelect,
-  IonSelectOption,
-  IonSpinner
+  IonButton
 } from '@ionic/angular/standalone';
 import { UserService } from '../../services/user.service';
 
@@ -26,20 +19,13 @@ import { UserService } from '../../services/user.service';
   styleUrls: ['./config.page.scss'],
   imports: [
     CommonModule,
-    IonIcon,
     IonCard,
     IonCardContent,
     IonContent,
     IonItem,
     IonLabel,
     IonInput,
-    IonButton,
-    IonGrid,
-    IonRow,
-    IonCol,
-    IonSelect,
-    IonSelectOption,
-    IonSpinner
+    IonButton
   ]
 })
 export class ConfigPage implements OnInit {

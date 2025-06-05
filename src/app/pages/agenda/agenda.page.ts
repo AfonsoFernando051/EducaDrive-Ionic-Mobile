@@ -8,9 +8,7 @@ import {
   IonLabel,
   IonCard,
   IonCardContent,
-  IonSpinner,
   IonButton,
-  IonIcon,
   IonDatetime,
   ModalController
 } from '@ionic/angular/standalone';
@@ -48,9 +46,7 @@ interface Aula {
     IonLabel,
     IonCard,
     IonCardContent,
-    IonSpinner,
     IonButton,
-    IonIcon,
     IonDatetime
   ]
 })
