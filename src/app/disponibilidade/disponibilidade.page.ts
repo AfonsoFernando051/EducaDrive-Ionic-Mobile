@@ -1,22 +1,27 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+
 import {
-  IonIcon,
-  IonCard,
-  IonCardContent,
-  IonContent,
+  IonCheckbox,
+  IonList,
   IonItem,
   IonLabel,
   IonInput,
+  IonIcon,
   IonButton,
   IonGrid,
   IonRow,
   IonCol,
+  IonCard,
+  IonCardContent,
+  IonContent,
   IonSelect,
   IonSelectOption,
   IonSpinner
 } from '@ionic/angular/standalone';
+
 import { UserService } from '../services/user.service';
 
 @Component({
@@ -24,23 +29,27 @@ import { UserService } from '../services/user.service';
   standalone: true,
   templateUrl: './disponibilidade.page.html',
   styleUrls: ['./disponibilidade.page.scss'],
-  imports: [
-    CommonModule,
-    IonIcon,
-    IonCard,
-    IonCardContent,
-    IonContent,
-    IonItem,
-    IonLabel,
-    IonInput,
-    IonButton,
-    IonGrid,
-    IonRow,
-    IonCol,
-    IonSelect,
-    IonSelectOption,
-    IonSpinner
-  ]
+ imports: [
+  CommonModule,
+  FormsModule,
+  IonCheckbox,
+  IonList,
+  IonItem,
+  IonLabel,
+  IonInput,
+  IonIcon,
+  IonButton,
+  IonGrid,
+  IonRow,
+  IonCol,
+  IonCard,
+  IonCardContent,
+  IonContent,
+  IonSelect,
+  IonSelectOption,
+  IonSpinner
+]
+
 })
 export class DisponibilidadePage implements OnInit {
   role: 'aluno' | 'professor' = 'aluno';
@@ -51,6 +60,15 @@ export class DisponibilidadePage implements OnInit {
   isLoading = false;
 
   constructor(private router: Router, private userService: UserService) {}
+diasSemana = [
+  { label: 'Segunda-feira', selecionado: false },
+  { label: 'Terça-feira', selecionado: false },
+  { label: 'Quarta-feira', selecionado: false },
+  { label: 'Quinta-feira', selecionado: false },
+  { label: 'Sexta-feira', selecionado: false },
+  { label: 'Sábado', selecionado: false },
+  { label: 'Domingo', selecionado: false }
+];
 
     async ngOnInit() {
     const profile = await this.userService.loadUserProfileFromStorage();

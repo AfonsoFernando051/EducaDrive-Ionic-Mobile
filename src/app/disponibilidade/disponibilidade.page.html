@@ -7,7 +7,6 @@
           <h3 class="username">{{ name }}</h3>
           <img src="assets/icon/enter-sharp.png" alt="logout" class="calendar" (click)="logout()" />
         </div>
-
       </div>
     </div>
     <hr />
@@ -16,35 +15,40 @@
   <ion-content class="ion-padding">
     <ion-card>
       <ion-card-content>
-  
         <h2>Disponibilidade</h2>
-  
-        <ion-grid>
+
+        <ion-label class="ion-margin-bottom">Escolha os dias disponíveis:</ion-label>
+
+        <ion-list>
+          <ion-item *ngFor="let dia of diasSemana">
+            <ion-label>{{ dia.label }}</ion-label>
+            <ion-checkbox slot="end" [(ngModel)]="dia.selecionado"></ion-checkbox>
+          </ion-item>
+        </ion-list>
+
+        <ion-grid class="ion-margin-top">
           <ion-row>
-            <ion-col size="6">
-              <ion-label>Semanal:</ion-label>
-              <ion-select placeholder="Escolha o período">
-                <ion-select-option value="segSex">Segunda a Sexta</ion-select-option>
-                <ion-select-option value="fimSemana">Fins de Semana</ion-select-option>
-              </ion-select>
-            </ion-col>
             <ion-col size="6">
               <ion-label>Diária:</ion-label>
               <ion-input placeholder="08:00 às 19:00" type="text">
                 <ion-icon slot="end" name="time-outline"></ion-icon>
               </ion-input>
             </ion-col>
-          </ion-row>
-  
-          <ion-row>
-            <ion-col size="12">
+            <ion-col size="6">
               <ion-label>Intervalo:</ion-label>
               <ion-input placeholder="12:00 às 13:00" type="text"></ion-input>
             </ion-col>
           </ion-row>
-        </ion-grid> 
+
+          <ion-row>
+            <ion-col size="12">
+              <ion-button expand="block" color="primary" class="ion-margin-top" (click)="saveChanges()">
+                Alterar
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
       </ion-card-content>
     </ion-card>
   </ion-content>
-  
 </ion-content>
