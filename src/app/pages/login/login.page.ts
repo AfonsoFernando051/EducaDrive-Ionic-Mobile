@@ -16,11 +16,11 @@ import {
 } from '@ionic/angular/standalone';
 
 import { AuthService } from '../../services/auth.service';
-import { getDoc, doc } from 'firebase/firestore';
-import { auth, db } from '../../../main';
+import { db } from '../../../main';
 import { UserService } from '../../services/user.service';
 
 interface UserProfile {
+  uid: string;
   name: string;
   email: string;
   role: 'aluno' | 'professor';
@@ -50,25 +50,28 @@ export class LoginPage implements OnInit {
   senha = '';
 
   constructor(
-  private router: Router,
-  private authService: AuthService,
-  private userService: UserService
-) {}
+    private router: Router,
+    private authService: AuthService,
+    private userService: UserService
+  ) {}
 
   ngOnInit() {}
 
   async onLogin() {
     try {
-      const user = await this.authService.login(this.email, this.senha);
+      const userCredential = await this.authService.login(this.email, this.senha);
+      const user = userCredential; // Firebase User
       console.log('Usuário autenticado:', user);
 
       const profile = await this.getUserProfileByUid(user.uid);
       if (profile) {
-        await this.userService.setUserProfile(profile);
-       this.router.navigate(['/tabs/agenda'], {
-       
-});
+        // ✅ salva perfil com uid
+        await this.userService.setUserProfile({
+          ...profile,
+          uid: user.uid
+        });
 
+        this.router.navigate(['/tabs/agenda']);
       } else {
         alert('Perfil não encontrado no banco.');
       }
@@ -77,24 +80,23 @@ export class LoginPage implements OnInit {
     }
   }
 
-  async getUserProfileByUid(uid: string): Promise<UserProfile | null> {
-  const q = query(collection(db, 'user'), where('userID', '==', uid));
-  const querySnapshot = await getDocs(q);
+  async getUserProfileByUid(uid: string): Promise<Omit<UserProfile, 'uid'> | null> {
+    const q = query(collection(db, 'user'), where('userID', '==', uid));
+    const querySnapshot = await getDocs(q);
 
-  if (!querySnapshot.empty) {
-    const doc = querySnapshot.docs[0];
-    const rawData = doc.data();
-    const data: UserProfile = {
-      name: rawData['nome'],
-      email: rawData['email'],
-      role: rawData['papel'],
-      photoURL: rawData['imagem']
-    };
-    console.log('Perfil do usuário:', data);
-    return data;
-  } else {
-    console.error('Perfil não encontrado no Firestore');
-    return null;
+    if (!querySnapshot.empty) {
+      const doc = querySnapshot.docs[0];
+      const rawData = doc.data();
+
+      return {
+        name: rawData['nome'],
+        email: rawData['email'],
+        role: rawData['papel'],
+        photoURL: rawData['imagem']
+      };
+    } else {
+      console.error('Perfil não encontrado no Firestore');
+      return null;
+    }
   }
-}
 }
