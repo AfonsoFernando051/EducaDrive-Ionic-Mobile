@@ -61,14 +61,15 @@ export class DisponibilidadePage implements OnInit {
 
   constructor(private router: Router, private userService: UserService) {}
 diasSemana = [
-  { label: 'Segunda-feira', selecionado: false },
-  { label: 'Terça-feira', selecionado: false },
-  { label: 'Quarta-feira', selecionado: false },
-  { label: 'Quinta-feira', selecionado: false },
-  { label: 'Sexta-feira', selecionado: false },
-  { label: 'Sábado', selecionado: false },
-  { label: 'Domingo', selecionado: false }
+  { label: 'Segunda-feira', selecionado: false, inicio: '', fim: '' },
+  { label: 'Terça-feira', selecionado: false, inicio: '', fim: '' },
+  { label: 'Quarta-feira', selecionado: false, inicio: '', fim: '' },
+  { label: 'Quinta-feira', selecionado: false, inicio: '', fim: '' },
+  { label: 'Sexta-feira', selecionado: false, inicio: '', fim: '' },
+  { label: 'Sábado', selecionado: false, inicio: '', fim: '' },
+  { label: 'Domingo', selecionado: false, inicio: '', fim: '' }
 ];
+
 
     async ngOnInit() {
     const profile = await this.userService.loadUserProfileFromStorage();

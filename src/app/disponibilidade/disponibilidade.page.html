@@ -20,34 +20,47 @@
         <ion-label class="ion-margin-bottom">Escolha os dias disponíveis:</ion-label>
 
         <ion-list>
-          <ion-item *ngFor="let dia of diasSemana">
-            <ion-label>{{ dia.label }}</ion-label>
-            <ion-checkbox slot="end" [(ngModel)]="dia.selecionado"></ion-checkbox>
-          </ion-item>
+          <ng-container *ngFor="let dia of diasSemana">
+            <!-- Checkbox do dia -->
+            <ion-item>
+              <ion-label>{{ dia.label }}</ion-label>
+              <ion-checkbox slot="end" [(ngModel)]="dia.selecionado"></ion-checkbox>
+            </ion-item>
+
+            <!-- Horários se estiver selecionado -->
+            <ion-item *ngIf="dia.selecionado" class="ion-padding-start">
+              <ion-label position="stacked">Horário de {{ dia.label }}</ion-label>
+              <ion-grid>
+                <ion-row>
+                  <ion-col size="6">
+                    <ion-input
+                      type="time"
+                      label="Início"
+                      labelPlacement="floating"
+                      [(ngModel)]="dia.inicio"
+                    ></ion-input>
+                  </ion-col>
+                  <ion-col size="6">
+                    <ion-input
+                      type="time"
+                      label="Fim"
+                      labelPlacement="floating"
+                      [(ngModel)]="dia.fim"
+                    ></ion-input>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-item>
+          </ng-container>
         </ion-list>
 
-        <ion-grid class="ion-margin-top">
-          <ion-row>
-            <ion-col size="6">
-              <ion-label>Diária:</ion-label>
-              <ion-input placeholder="08:00 às 19:00" type="text">
-                <ion-icon slot="end" name="time-outline"></ion-icon>
-              </ion-input>
-            </ion-col>
-            <ion-col size="6">
-              <ion-label>Intervalo:</ion-label>
-              <ion-input placeholder="12:00 às 13:00" type="text"></ion-input>
-            </ion-col>
-          </ion-row>
-
-          <ion-row>
-            <ion-col size="12">
-              <ion-button expand="block" color="primary" class="ion-margin-top" (click)="saveChanges()">
-                Alterar
-              </ion-button>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
+        <ion-row>
+          <ion-col size="12">
+            <ion-button expand="block" color="primary" class="ion-margin-top" (click)="saveChanges()">
+              Alterar
+            </ion-button>
+          </ion-col>
+        </ion-row>
       </ion-card-content>
     </ion-card>
   </ion-content>
