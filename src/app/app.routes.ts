@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { TabsPage } from './tabs/tabs.page';
 import { AgendaPage } from './pages/agenda/agenda.page';
 import { ConfigPage } from './pages/config/config.page';
+import { DisponibilidadePage } from './disponibilidade/disponibilidade.page';
 
 export const routes: Routes = [
   {
@@ -22,6 +23,10 @@ export const routes: Routes = [
         component: AgendaPage
       },
       {
+        path: 'disponibilidade',
+        component: DisponibilidadePage
+      },
+      {
         path: 'config',
         component: ConfigPage
       },
@@ -35,5 +40,9 @@ export const routes: Routes = [
   {
     path: 'config',
     loadComponent: () => import('./pages/config/config.page').then( m => m.ConfigPage)
+  },
+  {
+    path: 'disponibilidade',
+    loadComponent: () => import('./disponibilidade/disponibilidade.page').then( m => m.DisponibilidadePage)
   }
 ];
