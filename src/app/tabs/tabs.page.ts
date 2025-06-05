@@ -16,7 +16,7 @@ import { ActivatedRoute } from '@angular/router';
   standalone: true,
   imports: [
     CommonModule,
-    RouterModule, // necessário para routerLink e router-outlet
+    RouterModule, 
     IonTabs,
     IonTabBar,
     IonTabButton,
@@ -24,22 +24,9 @@ import { ActivatedRoute } from '@angular/router';
   ]
 })
 
-export class TabsPage implements OnInit {
-  role = '';
-  name = '';
-  email = '';
-  photoURL = '';
+export class TabsPage  {
 
   constructor(private route: ActivatedRoute) {}
 
-  ngOnInit() {
-    this.route.queryParams.subscribe(params => {
-      this.role = params['role'];
-      this.name = params['name'];
-      this.email = params['email'];
-      this.photoURL = params['photoURL'];
-
-      console.log('Dados recebidos:', this.role, this.name, this.email, this.photoURL);
-    });
-  }
+  
 }
