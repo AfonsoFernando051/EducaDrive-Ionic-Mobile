@@ -16,7 +16,10 @@ import {
   IonCol,
   IonCard,
   IonCardContent,
-  IonContent
+  IonContent,
+  IonSelect,
+  IonSelectOption,
+  IonSpinner
 } from '@ionic/angular/standalone';
 
 import { UserService } from '../services/user.service';
@@ -41,13 +44,17 @@ interface Disponibility {
     IonItem,
     IonLabel,
     IonInput,
+    IonIcon,
     IonButton,
     IonGrid,
     IonRow,
     IonCol,
     IonCard,
     IonCardContent,
-    IonContent
+    IonContent,
+    IonSelect,
+    IonSelectOption,
+    IonSpinner
   ]
 })
 export class DisponibilidadePage implements OnInit {
@@ -77,27 +84,29 @@ export class DisponibilidadePage implements OnInit {
   async ngOnInit() {
     const profile = await this.userService.loadUserProfileFromStorage();
     if (profile) {
-      this.uid = profile['uid'];
+      this.uid = profile['uid'] || '';
       this.role = profile['role'] || 'aluno';
       this.name = profile['name'] || 'Usuário';
       this.email = profile['email'] || '';
       this.photoURL = profile['photoURL'] || 'assets/photo/avatar.png';
 
-      const docRef = doc(this.firestore, 'disponibility', this.uid);
-      const snap = await getDoc(docRef);
+      if (this.uid) {
+        const docRef = doc(this.firestore, 'disponibility', this.uid);
+        const snap = await getDoc(docRef);
 
-      if (snap.exists()) {
-        const data = snap.data() as any;
-        const disponiveis = data.disponibility || [];
+        if (snap.exists()) {
+          const data = snap.data() as any;
+          const disponiveis = data.disponibility || [];
 
-        this.diasSemana.forEach(dia => {
-          const encontrado = disponiveis.find((d: any) => d.dia === dia.dia);
-          if (encontrado) {
-            dia.selecionado = true;
-            dia.inicio = encontrado.inicio;
-            dia.fim = encontrado.fim;
-          }
-        });
+          this.diasSemana.forEach(dia => {
+            const encontrado = disponiveis.find((d: any) => d.dia === dia.dia);
+            if (encontrado) {
+              dia.inicio = encontrado.inicio;
+              dia.fim = encontrado.fim;
+              dia.selecionado = encontrado.inicio !== '' || encontrado.fim !== '';
+            }
+          });
+        }
       }
     } else {
       console.warn('Nenhum perfil encontrado.');
@@ -121,7 +130,17 @@ export class DisponibilidadePage implements OnInit {
   async saveChanges() {
     this.isLoading = true;
     try {
+      if (!this.uid) {
+        const profile = await this.userService.loadUserProfileFromStorage();
+        if (profile?.uid) {
+          this.uid = profile.uid;
+        } else {
+          throw new Error('UID não encontrado. Não é possível salvar.');
+        }
+      }
+
       const updatedProfile = {
+        uid: this.uid,
         name: this.name,
         email: this.email,
         photoURL: this.photoURL,
@@ -130,13 +149,11 @@ export class DisponibilidadePage implements OnInit {
 
       this.userService.setUserProfile(updatedProfile);
 
-      const disponibilidade = this.diasSemana
-        .filter(d => d.selecionado)
-        .map(d => ({
-          dia: d.dia,
-          inicio: d.inicio,
-          fim: d.fim
-        }));
+      const disponibilidade = this.diasSemana.map(d => ({
+        dia: d.dia,
+        inicio: d.inicio || '',
+        fim: d.fim || ''
+      }));
 
       const docRef = doc(this.firestore, 'disponibility', this.uid);
       await setDoc(docRef, {
@@ -147,7 +164,6 @@ export class DisponibilidadePage implements OnInit {
       alert('Disponibilidade salva com sucesso!');
     } catch (error: any) {
       alert('Erro ao salvar alterações: ' + error.message);
-      console.log(error.message)
     } finally {
       this.isLoading = false;
     }
