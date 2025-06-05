@@ -9,17 +9,13 @@ import {
   IonItem,
   IonLabel,
   IonInput,
-  IonIcon,
   IonButton,
   IonGrid,
   IonRow,
   IonCol,
   IonCard,
   IonCardContent,
-  IonContent,
-  IonSelect,
-  IonSelectOption,
-  IonSpinner
+  IonContent
 } from '@ionic/angular/standalone';
 
 import { UserService } from '../services/user.service';
@@ -44,17 +40,13 @@ interface Disponibility {
     IonItem,
     IonLabel,
     IonInput,
-    IonIcon,
     IonButton,
     IonGrid,
     IonRow,
     IonCol,
     IonCard,
     IonCardContent,
-    IonContent,
-    IonSelect,
-    IonSelectOption,
-    IonSpinner
+    IonContent
   ]
 })
 export class DisponibilidadePage implements OnInit {
