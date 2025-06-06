@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import {
@@ -10,8 +10,13 @@ import {
   IonCardContent,
   IonButton,
   IonDatetime,
+  IonCardHeader,
+  IonInput,
+  IonSelect,
+  IonSelectOption,
   ModalController
 } from '@ionic/angular/standalone';
+import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { collection, query, where, getDocs, addDoc, deleteDoc, doc } from 'firebase/firestore';
 import { db } from '../../../main';
@@ -40,6 +45,7 @@ interface Aula {
   styleUrls: ['./agenda.page.scss'],
   imports: [
     CommonModule,
+    FormsModule,
     IonContent,
     IonItem,
     IonList,
@@ -47,8 +53,13 @@ interface Aula {
     IonCard,
     IonCardContent,
     IonButton,
-    IonDatetime
-  ]
+    IonDatetime,
+    IonCardHeader,
+    IonInput,
+    IonSelect,
+    IonSelectOption
+  ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AgendaPage implements OnInit {
   role: 'aluno' | 'professor' = 'aluno';
@@ -60,6 +71,9 @@ export class AgendaPage implements OnInit {
 
   showDatePicker = false;
   selectedDate: string | null = null;
+  selectedHorario: string = '';
+  horarios: string[] = ['08:00', '09:00', '10:00', '11:00'];
+  status: string = 'Confirmado';
 
   agendaItems: {
     id: string;
@@ -219,5 +233,13 @@ export class AgendaPage implements OnInit {
     } catch (error: any) {
       alert('Erro ao sair: ' + error.message);
     }
+  }
+
+  salvarAgendamento() {
+    // Lógica futura ou mover para componente modal
+  }
+
+  fecharModal() {
+    this.modalCtrl.dismiss();
   }
 }

@@ -1,23 +1,25 @@
 <ion-content class="agenda-container" fullscreen>
-  <div class="top-info">
+  <div class="top-info ion-padding">
     <div class="user-header">
       <img [src]="photoURL" alt="avatar" class="avatar" />
       <div class="user-info">
         <div class="user-top">
           <h3 class="username">{{ name }}</h3>
-          <img src="assets/icon/enter-sharp.png" alt="logout" class="calendar" (click)="logout()" />
+          <button class="logout-button" (click)="logout()">
+            <img src="assets/icon/enter-sharp.png" alt="logout" />
+          </button>
         </div>
 
-        <div class="date-picker">
-          <span>Selecione uma data:</span>
-          <ion-button fill="clear" (click)="showDatePicker = true" class="calendar-button">
-            <img src="assets/icon/calendar.png" alt="calendar" class="calendar" />
+        <div class="date-picker ion-margin-top">
+          <label>Selecione uma data:</label>
+          <button class="calendar-button" (click)="showDatePicker = true">
+            <img src="assets/icon/calendar.png" alt="calendar" />
             <span *ngIf="selectedDate">{{ selectedDate }}</span>
-          </ion-button>
+            <span *ngIf="!selectedDate">Escolher</span>
+          </button>
         </div>
       </div>
     </div>
-    <hr />
   </div>
 
   <ion-datetime
@@ -27,32 +29,33 @@
     (ionCancel)="showDatePicker = false"
   ></ion-datetime>
 
-  <ion-card class="login-card">
+  <ion-card class="ion-margin" *ngIf="selectedDate">
+    <ion-card-header>
+      <h2 class="card-title">Agenda</h2>
+    </ion-card-header>
     <ion-card-content>
-      <ion-list class="agenda-list">
-        <ion-item *ngFor="let item of agendaItems" class="agenda-item" [color]="item.cor">
+      <ion-list>
+        <ion-item *ngFor="let item of agendaItems" [color]="item.cor">
           <img [src]="item.imagem" alt="avatar" class="avatar" />
           <ion-label>
-            <h3 class="nome">{{ item.nome }}</h3>
-            <p class="status">{{ item.status }}</p>
+            <h3>{{ item.nome }}</h3>
+            <p>{{ item.status }}</p>
           </ion-label>
-          <div slot="end">
-            <ion-button
-              *ngIf="role === 'aluno' && item.status === 'Disponível'"
-              size="small"
-              (click)="abrirModal(item.id)"
-            >
-              Marcar
-            </ion-button>
-            <ion-button
-              *ngIf="role === 'professor'"
-              size="small"
-              color="danger"
-              (click)="cancelarAula(item.id)"
-            >
-              Cancelar
-            </ion-button>
-          </div>
+          <ion-button
+            *ngIf="role === 'aluno' && item.status === 'Disponível'"
+            slot="end"
+            size="small"
+            (click)="abrirModal(item.id)">
+            Marcar
+          </ion-button>
+          <ion-button
+            *ngIf="role === 'professor'"
+            slot="end"
+            size="small"
+            color="danger"
+            (click)="cancelarAula(item.id)">
+            Cancelar
+          </ion-button>
         </ion-item>
       </ion-list>
     </ion-card-content>
