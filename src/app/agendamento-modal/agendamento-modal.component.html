@@ -1,34 +1,45 @@
-<div style="padding: 16px;">
-  <h3>Agendamento</h3>
+<ion-content class="ion-padding modal-agendamento">
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title class="ion-text-center">Agendamento</ion-card-title>
+    </ion-card-header>
 
-  <ion-item>
-    <ion-label>Data</ion-label>
-    <ion-input [value]="date" readonly></ion-input>
-  </ion-item>
+    <ion-card-content>
+      <ion-item>
+        <ion-label position="stacked">Data</ion-label>
+        <ion-input [value]="date" readonly></ion-input>
+      </ion-item>
 
-  <ion-item>
-    <ion-label>Horário</ion-label>
-    <ion-select [(ngModel)]="horario" placeholder="Selecione">
-      <ion-select-option value="08:00">08:00</ion-select-option>
-      <ion-select-option value="10:00">10:00</ion-select-option>
-      <ion-select-option value="14:00">14:00</ion-select-option>
-      <ion-select-option value="16:00">16:00</ion-select-option>
-    </ion-select>
-  </ion-item>
+      <ion-item>
+        <ion-label position="stacked">Horário</ion-label>
+        <ion-select [(ngModel)]="horario" placeholder="Selecione">
+          <ion-select-option value="08:00">08:00</ion-select-option>
+          <ion-select-option value="10:00">10:00</ion-select-option>
+          <ion-select-option value="14:00">14:00</ion-select-option>
+          <ion-select-option value="16:00">16:00</ion-select-option>
+        </ion-select>
+      </ion-item>
 
-  <ion-item>
-    <ion-label>Aluno</ion-label>
-    <ion-input [value]="alunoName" readonly></ion-input>
-  </ion-item>
+      <ion-item>
+        <ion-label position="stacked">Aluno</ion-label>
+        <ion-input [value]="alunoName" readonly></ion-input>
+      </ion-item>
 
-  <ion-item>
-    <ion-label>Situação</ion-label>
-    <ion-select [(ngModel)]="status">
-      <ion-select-option value="confirmado">Confirmado</ion-select-option>
-      <ion-select-option value="cancelado">Cancelado</ion-select-option>
-    </ion-select>
-  </ion-item>
+      <ion-item>
+        <ion-label position="stacked">Situação</ion-label>
+        <ion-select [(ngModel)]="status">
+          <ion-select-option value="confirmado">Confirmado</ion-select-option>
+          <ion-select-option value="cancelado">Cancelado</ion-select-option>
+        </ion-select>
+      </ion-item>
 
-  <ion-button expand="block" (click)="confirmar()">Alterar</ion-button>
-  <ion-button expand="block" fill="clear" (click)="cancelar()">Cancelar</ion-button>
-</div>
+      <ion-button expand="block" color="primary" class="ion-margin-top" (click)="confirmar()">
+        Alterar
+      </ion-button>
+
+      <ion-button expand="block" fill="clear" color="medium" (click)="cancelar()">
+        Cancelar
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
