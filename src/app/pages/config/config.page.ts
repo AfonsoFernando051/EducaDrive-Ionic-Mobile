@@ -43,6 +43,7 @@ export class ConfigPage implements OnInit {
   // Variáveis para alteração de senha
   currentPassword = '';
   newPassword = '';
+  confirmNewPassword = '';
 
   constructor(private router: Router, private userService: UserService, private auth: Auth) {}
 
@@ -98,6 +99,11 @@ export class ConfigPage implements OnInit {
     this.isLoading = true;
 
     try {
+      if (this.newPassword !== this.confirmNewPassword) {
+        alert('A nova senha e a confirmação não coincidem.');
+        return;
+      }
+
       const user = this.auth.currentUser;
 
       if (!user || !user.email) {
@@ -119,6 +125,7 @@ export class ConfigPage implements OnInit {
       // Limpa os campos de senha do form
       this.currentPassword = '';
       this.newPassword = '';
+      this.confirmNewPassword = '';
 
     } catch (error: any) {
       console.error('Erro ao mudar senha:', error);

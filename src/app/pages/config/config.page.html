@@ -1,5 +1,7 @@
 <ion-content class="agenda-container" fullscreen>
+
   <div class="top-info">
+    <!-- avatar + nome + botão logout -->
     <div class="user-header">
       <img [src]="photoURL" alt="avatar" class="avatar" />
       <div class="user-info">
@@ -12,40 +14,49 @@
     <hr />
   </div>
 
-  <ion-content class="ion-padding">
-    <ion-card>
-      <ion-card-content>   
-  
-        <h2 style="margin-top: 1rem;">Dados do Usuário</h2>
-  
-        <ion-item class="item">
-          <ion-label position="floating">Nome</ion-label>
-          <ion-input class="placeholder" [(ngModel)]="name" type="text"></ion-input>
-        </ion-item>
-  
-        <ion-item class="item">
-          <ion-label position="floating">E-mail</ion-label>
-          <ion-input class="placeholder" [(ngModel)]="email" type="email"></ion-input>
-        </ion-item>
-  
-        <h2 style="margin-top: 2rem;">Alterar Senha</h2>
+  <!-- tudo aqui dentro do mesmo ion-content -->
+  <ion-card class="ion-padding">
+    <ion-card-content>   
 
-        <ion-item class="item">
-          <ion-label position="floating">Senha atual</ion-label>
-          <ion-input class="placeholder" [(ngModel)]="currentPassword" type="password"></ion-input>
-        </ion-item>
-  
-        <ion-item class="item">
-          <ion-label position="floating">Nova senha</ion-label>
-          <ion-input class="placeholder" [(ngModel)]="newPassword" type="password"></ion-input>
-        </ion-item>
-  
-        <div style="display: flex; align-items: center; justify-content: center; margin-top: 1rem;">
-          <img src="assets/icon/enter-sharp.png" alt="alterar senha" style="width: 30px; height: 30px; cursor: pointer;" (click)="changePassword()" />
-          <span style="margin-left: 0.5rem; font-size: 16px;">Alterar Senha</span>
-        </div>
-  
-      </ion-card-content>
-    </ion-card>
-  </ion-content>
+      <h2 style="margin-top: 1rem;">Dados do Usuário</h2>
+
+      <ion-item class="item">
+        <ion-label position="floating">Nome</ion-label>
+        <ion-input class="placeholder" [(ngModel)]="name" type="text"></ion-input>
+      </ion-item>
+
+      <ion-item class="item">
+        <ion-label position="floating">E-mail</ion-label>
+        <ion-input class="placeholder" [(ngModel)]="email" type="email"></ion-input>
+      </ion-item>
+
+      <h2 style="margin-top: 2rem;">Alterar Senha</h2>
+
+      <ion-item class="item">
+        <ion-label position="floating">Senha atual</ion-label>
+        <ion-input class="placeholder" [(ngModel)]="currentPassword" type="password"></ion-input>
+      </ion-item>
+
+      <ion-item class="item">
+        <ion-label position="floating">Nova senha</ion-label>
+        <ion-input class="placeholder" [(ngModel)]="newPassword" type="password"></ion-input>
+      </ion-item>
+
+      <ion-item class="item">
+        <ion-label position="floating">Confirmar nova senha</ion-label>
+        <ion-input class="placeholder" [(ngModel)]="confirmNewPassword" type="password"></ion-input>
+      </ion-item>
+
+      <div *ngIf="newPassword && confirmNewPassword && newPassword !== confirmNewPassword" style="color: red; font-size: 14px; margin-top: 0.5rem; text-align: center;">
+        As senhas não coincidem.
+      </div>
+
+      <div style="display: flex; align-items: center; justify-content: center; margin-top: 1rem;">
+        <img src="assets/icon/enter-sharp.png" alt="alterar senha" style="width: 30px; height: 30px; cursor: pointer;" (click)="changePassword()" />
+        <span style="margin-left: 0.5rem; font-size: 16px;">Alterar Senha</span>
+      </div>
+
+    </ion-card-content>
+  </ion-card>
+
 </ion-content>
