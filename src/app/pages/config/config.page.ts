@@ -10,7 +10,10 @@ import {
   IonInput,
   IonButton
 } from '@ionic/angular/standalone';
+import { FormsModule } from '@angular/forms';
 import { UserService } from '../../services/user.service';
+
+import { Auth, updatePassword, reauthenticateWithCredential, EmailAuthProvider } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-config',
@@ -19,6 +22,7 @@ import { UserService } from '../../services/user.service';
   styleUrls: ['./config.page.scss'],
   imports: [
     CommonModule,
+    FormsModule,
     IonCard,
     IonCardContent,
     IonContent,
@@ -36,9 +40,13 @@ export class ConfigPage implements OnInit {
   photoURL = '';
   isLoading = false;
 
-  constructor(private router: Router, private userService: UserService) {}
+  // Variáveis para alteração de senha
+  currentPassword = '';
+  newPassword = '';
 
-    async ngOnInit() {
+  constructor(private router: Router, private userService: UserService, private auth: Auth) {}
+
+  async ngOnInit() {
     const profile = await this.userService.loadUserProfileFromStorage();
     if (profile) {
       this.uid = profile['uid'];
@@ -52,7 +60,7 @@ export class ConfigPage implements OnInit {
     }
   }
 
-   async logout() {
+  async logout() {
     this.isLoading = true;
     try {
       await this.userService.clearUserProfile();  // limpa memória + storage
@@ -77,10 +85,44 @@ export class ConfigPage implements OnInit {
 
       this.userService.setUserProfile(updatedProfile);  // atualiza memória + storage
 
-      // Aqui você pode adicionar também lógica para salvar no Firestore se quiser
       alert('Alterações salvas com sucesso!');
     } catch (error: any) {
       alert('Erro ao salvar alterações: ' + error.message);
+    } finally {
+      this.isLoading = false;
+    }
+  }
+
+  // NOVA FUNÇÃO - alterar senha
+  async changePassword() {
+    this.isLoading = true;
+
+    try {
+      const user = this.auth.currentUser;
+
+      if (!user || !user.email) {
+        throw new Error('Usuário não autenticado ou sem e-mail.');
+      }
+
+      // 1️⃣ Reautenticar
+      const credential = EmailAuthProvider.credential(user.email, this.currentPassword);
+
+      await reauthenticateWithCredential(user, credential);
+      console.log('Reautenticação bem-sucedida.');
+
+      // 2️⃣ Atualizar senha
+      await updatePassword(user, this.newPassword);
+      console.log('Senha atualizada com sucesso!');
+
+      alert('Senha alterada com sucesso!');
+
+      // Limpa os campos de senha do form
+      this.currentPassword = '';
+      this.newPassword = '';
+
+    } catch (error: any) {
+      console.error('Erro ao mudar senha:', error);
+      alert('Erro ao mudar senha: ' + error.message);
     } finally {
       this.isLoading = false;
     }

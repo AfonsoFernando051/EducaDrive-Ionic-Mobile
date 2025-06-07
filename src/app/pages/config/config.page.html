@@ -1,5 +1,5 @@
 <ion-content class="agenda-container" fullscreen>
- <div class="top-info">
+  <div class="top-info">
     <div class="user-header">
       <img [src]="photoURL" alt="avatar" class="avatar" />
       <div class="user-info">
@@ -7,7 +7,6 @@
           <h3 class="username">{{ name }}</h3>
           <img src="assets/icon/enter-sharp.png" alt="logout" class="calendar" (click)="logout()" />
         </div>
-
       </div>
     </div>
     <hr />
@@ -21,25 +20,32 @@
   
         <ion-item class="item">
           <ion-label position="floating">Nome</ion-label>
-          <ion-input  class="placeholder" placeholder="{{ name }}" type="text"></ion-input>
+          <ion-input class="placeholder" [(ngModel)]="name" type="text"></ion-input>
         </ion-item>
   
-        <ion-item  class="item">
+        <ion-item class="item">
           <ion-label position="floating">E-mail</ion-label>
-          <ion-input class="placeholder" placeholder="{{email}}" type="email"></ion-input>
+          <ion-input class="placeholder" [(ngModel)]="email" type="email"></ion-input>
         </ion-item>
   
-        <ion-item  class="item">
-          <ion-label position="floating">Senha</ion-label>
-          <ion-input class="placeholder" type="password" value="*****"></ion-input>
+        <h2 style="margin-top: 2rem;">Alterar Senha</h2>
+
+        <ion-item class="item">
+          <ion-label position="floating">Senha atual</ion-label>
+          <ion-input class="placeholder" [(ngModel)]="currentPassword" type="password"></ion-input>
         </ion-item>
   
-        <ion-button expand="block" color="primary" class="ion-margin-top">
-          Alterar
-        </ion-button>
+        <ion-item class="item">
+          <ion-label position="floating">Nova senha</ion-label>
+          <ion-input class="placeholder" [(ngModel)]="newPassword" type="password"></ion-input>
+        </ion-item>
+  
+        <div style="display: flex; align-items: center; justify-content: center; margin-top: 1rem;">
+          <img src="assets/icon/enter-sharp.png" alt="alterar senha" style="width: 30px; height: 30px; cursor: pointer;" (click)="changePassword()" />
+          <span style="margin-left: 0.5rem; font-size: 16px;">Alterar Senha</span>
+        </div>
   
       </ion-card-content>
     </ion-card>
   </ion-content>
-  
 </ion-content>
