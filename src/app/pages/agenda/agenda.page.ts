@@ -54,10 +54,7 @@ interface Aula {
     IonCardContent,
     IonButton,
     IonDatetime,
-    IonCardHeader,
-    IonInput,
-    IonSelect,
-    IonSelectOption
+    IonCardHeader
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

@@ -7,8 +7,7 @@ import {
   IonContent,
   IonItem,
   IonLabel,
-  IonInput,
-  IonButton
+  IonInput
 } from '@ionic/angular/standalone';
 import { FormsModule } from '@angular/forms';
 import { UserService } from '../../services/user.service';
@@ -28,9 +27,8 @@ import { Auth, updatePassword, reauthenticateWithCredential, EmailAuthProvider }
     IonContent,
     IonItem,
     IonLabel,
-    IonInput,
-    IonButton
-  ]
+    IonInput
+    ]
 })
 export class ConfigPage implements OnInit {
   role: 'aluno' | 'professor' = 'aluno';
