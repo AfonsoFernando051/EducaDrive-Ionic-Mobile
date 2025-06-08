@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonList, IonItem, IonLabel, IonCard, IonCardHeader, IonCardContent, IonSpinner } from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonTitle, IonToolbar, IonList, IonItem, IonLabel, IonCard, IonCardHeader, IonCardContent, IonSpinner, IonDatetime, IonButton } from '@ionic/angular/standalone';
 
 import { getDocs, query, where, collection } from 'firebase/firestore';
 import { db } from 'src/main';
@@ -24,7 +24,7 @@ interface Aula {
   standalone: true,
   imports: [
     IonContent, IonHeader, IonTitle, IonToolbar,
-    IonList, IonItem, IonLabel, IonCard, IonCardHeader, IonCardContent, IonSpinner,
+    IonList, IonItem, IonLabel, IonCard, IonCardHeader, IonCardContent, IonSpinner, IonDatetime, IonButton,
     CommonModule, FormsModule
   ]
 })
@@ -35,6 +35,8 @@ export class AgendadosPage implements OnInit {
   isLoading = false;
   name = '';
   photoURL = '';
+  selectedDate: string | null = null;
+  showDatePicker = false;
 
   constructor(
     private userService: UserService,
@@ -58,19 +60,51 @@ export class AgendadosPage implements OnInit {
     this.agendados = [];
 
     try {
-      const aulaQuery = this.role === 'aluno'
-        ? query(collection(db, 'agenda'), where('alunoId', '==', this.uid), where('status', '==', 'confirmado'))
-        : query(collection(db, 'agenda'), where('professorId', '==', this.uid), where('status', '==', 'confirmado'));
+      let aulaQuery;
+
+      if (this.role === 'aluno') {
+        aulaQuery = query(
+          collection(db, 'agenda'),
+          where('alunoId', '==', this.uid),
+          where('status', '==', 'confirmado')
+        );
+      } else {
+        aulaQuery = query(
+          collection(db, 'agenda'),
+          where('professorId', '==', this.uid),
+          where('status', '==', 'confirmado')
+        );
+      }
 
       const aulasSnap = await getDocs(aulaQuery);
 
-      this.agendados = aulasSnap.docs.map(doc => doc.data() as Aula);
+      let aulas = aulasSnap.docs.map(doc => doc.data() as Aula);
+
+      // Filtro por data se selecionada
+      if (this.selectedDate) {
+        aulas = aulas.filter(aula => aula.date === this.selectedDate);
+      }
+
+      this.agendados = aulas;
     } catch (error) {
       console.error('Erro ao carregar aulas agendadas:', error);
       alert('Erro ao carregar aulas agendadas.');
     } finally {
       this.isLoading = false;
     }
+  }
+
+  onDateSelected(event: any) {
+    const rawDate = event.detail.value;
+    const date = new Date(rawDate);
+    this.selectedDate = date.toISOString().split('T')[0];
+    this.showDatePicker = false;
+    this.loadAgendados();
+  }
+
+  clearDateFilter() {
+    this.selectedDate = null;
+    this.loadAgendados();
   }
 
   async logout() {

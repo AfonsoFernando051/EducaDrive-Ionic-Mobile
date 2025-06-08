@@ -18,6 +18,27 @@
     </div>
   </div>
 
+  <!-- Date picker para filtrar -->
+  <div class="date-picker ion-margin">
+    <label>Filtrar por data:</label>
+    <button class="calendar-button" (click)="showDatePicker = true">
+      <img src="assets/icon/calendar.png" alt="calendar" />
+      <span *ngIf="selectedDate">{{ selectedDate }}</span>
+      <span *ngIf="!selectedDate">Escolher</span>
+    </button>
+    <ion-button size="small" fill="clear" color="medium" *ngIf="selectedDate" (click)="clearDateFilter()">
+      Limpar filtro
+    </ion-button>
+  </div>
+
+  <!-- Date picker modal -->
+  <ion-datetime
+    *ngIf="showDatePicker"
+    presentation="date"
+    (ionChange)="onDateSelected($event)"
+    (ionCancel)="showDatePicker = false">
+  </ion-datetime>
+
   <!-- Lista de agendados -->
   <ion-card class="ion-margin" *ngIf="!isLoading && agendados.length > 0">
     <ion-card-header>

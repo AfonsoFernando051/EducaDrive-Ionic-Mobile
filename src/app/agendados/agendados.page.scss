@@ -72,6 +72,34 @@
     padding: 12px;
   }
 
+  .date-picker {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+
+    label {
+      font-weight: 600;
+      margin-right: 8px;
+    }
+
+    .calendar-button {
+      background: none;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 6px 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+
+      img {
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
+
   ion-spinner {
     display: block;
     margin: 20px auto;
