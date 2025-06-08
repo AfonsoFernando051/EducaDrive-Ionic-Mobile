@@ -11,7 +11,7 @@ import { IonicModule, ModalController } from '@ionic/angular';
   imports: [
     CommonModule,
     FormsModule,
-    IonicModule  // ✅ garante ModalController e todos os ion-*
+    IonicModule 
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

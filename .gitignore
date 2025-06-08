@@ -1,40 +1,31 @@
-# Specifies intentionally untracked files to ignore when using Git
-# http://git-scm.com/docs/gitignore
-
+# General temporary files
 *~
 *.sw[mnpcod]
 .tmp
 *.tmp
 *.tmp.*
-UserInterfaceState.xcuserstate
+
+# macOS & Windows system files
+.DS_Store
+Thumbs.db
 $RECYCLE.BIN/
 
+# Log files
 *.log
 log.txt
+npm-debug.log*
+yarn-error.log*
+yarn-debug.log*
 
-
+# Coverage & cache
+/coverage
+/.angular/cache
+/.nx
+/.nx/cache
 /.sourcemaps
 /.versions
-/coverage
 
-# Ionic
-/.ionic
-/www
-/platforms
-/plugins
-
-# Compiled output
-/dist
-/tmp
-/out-tsc
-/bazel-out
-
-# Node
-/node_modules
-npm-debug.log
-yarn-error.log
-
-# IDEs and editors
+# IDEs & editors
 .idea/
 .project
 .classpath
@@ -52,19 +43,37 @@ yarn-error.log
 !.vscode/extensions.json
 .history/*
 
+# Node
+/node_modules
+
+# Web build output
+/www
+
+# Capacitor build output
+/android/build/
+/android/app/build/
+/ios/build/
+/ios/App/build/
+
+# Cordova legacy (optional, only if used - safe to remove if using Capacitor)
+/platforms
+/plugins
+
+# Firebase sensitive files
+google-services.json
+serviceAccountKey.json
+
+# Environment files
+.env
+.env.*.local
 
 # Miscellaneous
-/.angular
-/.angular/cache
-.sass-cache/
-/.nx
-/.nx/cache
-/connect.lock
-/coverage
+UserInterfaceState.xcuserstate
+/tmp
+/out-tsc
+/dist
 /libpeerconnection.log
 testem.log
 /typings
-
-# System files
-.DS_Store
-Thumbs.db
+/connect.lock
+.sass-cache
