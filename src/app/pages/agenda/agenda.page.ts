@@ -178,7 +178,8 @@ export class AgendaPage implements OnInit {
       component: AgendamentoModalComponent,
       componentProps: {
         date: this.selectedDate,
-        alunoName: this.name
+        alunoName: this.name,
+        professorId: professorId
       }
     });
 

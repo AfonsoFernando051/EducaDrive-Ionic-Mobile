@@ -1,0 +1,48 @@
+<ion-content class="agenda-container" fullscreen>
+  <!-- Top info com padding -->
+  <div class="top-info ion-padding">
+    <div class="user-header">
+      <img [src]="photoURL" alt="avatar" class="avatar" />
+      <div class="user-info">
+        <div class="user-top">
+          <h3 class="username">{{ name }}</h3>
+          <button class="logout-button" (click)="logout()">
+            <img src="assets/icon/enter-sharp.png" alt="logout" />
+          </button>
+        </div>
+
+        <div class="section-title ion-margin-top">
+          <h2>Minhas Aulas Agendadas</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lista de agendados -->
+  <ion-card class="ion-margin" *ngIf="!isLoading && agendados.length > 0">
+    <ion-card-header>
+      <h2 class="card-title">Aulas</h2>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item *ngFor="let aula of agendados" color="light">
+          <ion-label>
+            <h3>Data: {{ aula.date }}</h3>
+            <p>Horário: {{ aula.horario }}</p>
+            <p *ngIf="role === 'aluno'">Professor ID: {{ aula.professorId }}</p>
+            <p *ngIf="role === 'professor'">Aluno ID: {{ aula.alunoId }}</p>
+            <p>Status: {{ aula.status }}</p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Spinner -->
+  <ion-spinner *ngIf="isLoading" name="dots" class="ion-margin-top"></ion-spinner>
+
+  <!-- Nenhuma aula -->
+  <p *ngIf="!isLoading && agendados.length === 0" class="ion-text-center ion-padding">
+    Nenhuma aula agendada.
+  </p>
+</ion-content>

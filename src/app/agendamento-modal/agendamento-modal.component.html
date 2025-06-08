@@ -12,12 +12,14 @@
 
       <ion-item>
         <ion-label position="stacked">Horário</ion-label>
-        <ion-select [(ngModel)]="horario" placeholder="Selecione">
-          <ion-select-option value="08:00">08:00</ion-select-option>
-          <ion-select-option value="10:00">10:00</ion-select-option>
-          <ion-select-option value="14:00">14:00</ion-select-option>
-          <ion-select-option value="16:00">16:00</ion-select-option>
+        <ion-select [(ngModel)]="horario" placeholder="Selecione" *ngIf="disponibilidadeHorarios.length > 0">
+          <ion-select-option *ngFor="let hora of disponibilidadeHorarios" [value]="hora">
+            {{ hora }}
+          </ion-select-option>
         </ion-select>
+        <ion-label *ngIf="disponibilidadeHorarios.length === 0" color="danger">
+          Nenhum horário disponível para este dia.
+        </ion-label>
       </ion-item>
 
       <ion-item>

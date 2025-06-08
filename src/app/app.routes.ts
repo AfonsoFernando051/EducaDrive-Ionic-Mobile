@@ -31,6 +31,10 @@ export const routes: Routes = [
         component: ConfigPage
       },
       {
+        path: 'agendados',
+        loadComponent: () => import('./agendados/agendados.page').then( m => m.AgendadosPage)
+      },
+      {
         path: '',
         redirectTo: 'agenda',
         pathMatch: 'full'
@@ -44,5 +48,9 @@ export const routes: Routes = [
   {
     path: 'disponibilidade',
     loadComponent: () => import('./disponibilidade/disponibilidade.page').then( m => m.DisponibilidadePage)
+  },
+  {
+    path: 'agendados',
+    loadComponent: () => import('./agendados/agendados.page').then( m => m.AgendadosPage)
   }
 ];

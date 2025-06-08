@@ -1,0 +1,84 @@
+.agenda-container {
+  .top-info {
+    background-color: #f8f8f8;
+    border-bottom: 1px solid #e0e0e0;
+
+    .user-header {
+      display: flex;
+      align-items: center;
+
+      .avatar {
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-right: 12px;
+      }
+
+      .user-info {
+        flex: 1;
+
+        .user-top {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+
+          .username {
+            font-size: 1.2rem;
+            font-weight: 600;
+          }
+
+          .logout-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+
+            img {
+              width: 24px;
+              height: 24px;
+            }
+          }
+        }
+
+        .section-title {
+          margin-top: 8px;
+
+          h2 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #555;
+          }
+        }
+      }
+    }
+  }
+
+  ion-card {
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .card-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-top: 8px;
+  }
+
+  ion-item {
+    margin-bottom: 12px;
+    --background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1);
+    padding: 12px;
+  }
+
+  ion-spinner {
+    display: block;
+    margin: 20px auto;
+  }
+
+  p {
+    color: #666;
+    font-size: 1rem;
+  }
+}
