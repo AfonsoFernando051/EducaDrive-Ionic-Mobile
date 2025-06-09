@@ -20,7 +20,7 @@ import { getFirestore, collection, query, where, getDocs } from 'firebase/firest
 export class AgendamentoModalComponent implements OnInit {
   @Input() date: string = '';
   @Input() alunoName: string = '';
-  @Input() professorId: string = ''; // RECEBE o professorId da agenda.page.ts
+  @Input() professorId: string = ''; 
 
   horario: string = '';
   status: string = 'confirmado';
@@ -29,15 +29,19 @@ export class AgendamentoModalComponent implements OnInit {
   private modalCtrl = inject(ModalController);
 
   async ngOnInit() {
+
     if (this.professorId && this.date) {
       const db = getFirestore();
 
       const diaSemana = this.getDiaSemana(this.date);
 
       const disponibilityRef = collection(db, 'disponibility');
+
+      // Log dos documentos da collection inteira (opcional para debug)
+      const allDocsSnap = await getDocs(disponibilityRef);
+
+      // Query correta com professorId atual
       const q = query(disponibilityRef, where('uid', '==', this.professorId));
-      console.log(q)
-      console.log(this.professorId)
 
       const querySnapshot = await getDocs(q);
 
@@ -47,8 +51,13 @@ export class AgendamentoModalComponent implements OnInit {
         const data = docSnap.data() as any;
         const disponibility = data.disponibility;
 
+
         disponibility.forEach((slot: any) => {
-          if (slot.dia === diaSemana) {
+          const slotDiaNormalizado = this.normalizeDia(slot.dia);
+          const diaSemanaNormalizado = this.normalizeDia(diaSemana);
+
+
+          if (slotDiaNormalizado === diaSemanaNormalizado) {
             const horariosSlot = this.gerarHorarios(slot.inicio, slot.fim);
             horarios.push(...horariosSlot);
           }
@@ -56,6 +65,7 @@ export class AgendamentoModalComponent implements OnInit {
       });
 
       this.disponibilidadeHorarios = horarios;
+      console.log('Horários disponíveis:', this.disponibilidadeHorarios);
     }
   }
 
@@ -74,18 +84,32 @@ export class AgendamentoModalComponent implements OnInit {
     this.modalCtrl.dismiss(null, 'cancel');
   }
 
- getDiaSemana(dateStr: string): string {
-  const data = new Date(dateStr); // Exemplo: '2025-06-10' → Date
-  const dias = ['domingo', 'segunda', 'terca', 'quarta', 'quinta', 'sexta', 'sabado'];
-  return dias[data.getDay()];
-}
+  getDiaSemana(dateStr: string): string {
+    const data = new Date(dateStr);
+    const dias = ['domingo', 'segunda', 'terca', 'quarta', 'quinta', 'sexta', 'sabado'];
+    return dias[data.getDay()];
+  }
 
+  normalizeDia(dia: string): string {
+    return dia
+      .toLowerCase()
+      .replace('-feira', '')   // remove "feira"
+      .replace('feira', '')    // caso sem hífen
+      .trim()                  // remove espaços
+      .normalize('NFD')        // remove acentos
+      .replace(/[\u0300-\u036f]/g, '');
+  }
 
   gerarHorarios(inicioStr: string, fimStr: string): string[] {
     const horarios: string[] = [];
 
     const inicio = this.strToMinutes(inicioStr);
     const fim = this.strToMinutes(fimStr);
+
+    if (isNaN(inicio) || isNaN(fim)) {
+      console.warn('Início ou fim inválido:', inicioStr, fimStr);
+      return horarios;
+    }
 
     for (let t = inicio; t < fim; t += 60) { // incrementa de 1 em 1 hora
       const horaFormatada = this.minutesToStr(t);
