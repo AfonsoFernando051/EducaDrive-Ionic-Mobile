@@ -22,14 +22,14 @@ export class AgendamentoModalComponent implements OnInit {
   @Input() alunoName: string = '';
   @Input() professorId: string = ''; 
 
-  horario: string = '';
+  horarioInicio: string = '';
+  horarioFim: string = '';
   status: string = 'confirmado';
   disponibilidadeHorarios: string[] = [];
 
   private modalCtrl = inject(ModalController);
 
   async ngOnInit() {
-
     if (this.professorId && this.date) {
       const db = getFirestore();
 
@@ -37,10 +37,6 @@ export class AgendamentoModalComponent implements OnInit {
 
       const disponibilityRef = collection(db, 'disponibility');
 
-      // Log dos documentos da collection inteira (opcional para debug)
-      const allDocsSnap = await getDocs(disponibilityRef);
-
-      // Query correta com professorId atual
       const q = query(disponibilityRef, where('uid', '==', this.professorId));
 
       const querySnapshot = await getDocs(q);
@@ -51,11 +47,9 @@ export class AgendamentoModalComponent implements OnInit {
         const data = docSnap.data() as any;
         const disponibility = data.disponibility;
 
-
         disponibility.forEach((slot: any) => {
           const slotDiaNormalizado = this.normalizeDia(slot.dia);
           const diaSemanaNormalizado = this.normalizeDia(diaSemana);
-
 
           if (slotDiaNormalizado === diaSemanaNormalizado) {
             const horariosSlot = this.gerarHorarios(slot.inicio, slot.fim);
@@ -65,17 +59,22 @@ export class AgendamentoModalComponent implements OnInit {
       });
 
       this.disponibilidadeHorarios = horarios;
-      console.log('Horários disponíveis:', this.disponibilidadeHorarios);
     }
   }
 
   confirmar() {
-    if (!this.horario) {
-      alert('Selecione um horário!');
+    if (!this.horarioInicio || !this.horarioFim) {
+      alert('Selecione o horário de início e fim!');
       return;
     }
+
+    if (this.strToMinutes(this.horarioFim) <= this.strToMinutes(this.horarioInicio)) {
+      alert('O horário de fim deve ser depois do horário de início!');
+      return;
+    }
+
     this.modalCtrl.dismiss(
-      { horario: this.horario, status: this.status },
+      { horarioInicio: this.horarioInicio, horarioFim: this.horarioFim, status: this.status },
       'confirm'
     );
   }

@@ -29,7 +29,8 @@ interface User {
 
 interface Aula {
   date: string;
-  horario?: string;
+  horarioInicio: string;
+  horarioFim: string;
   professorId: string;
   alunoId: string;
   status: string;
@@ -156,9 +157,9 @@ export class AgendaPage implements OnInit {
           const aluno = alunoSnap.docs[0]?.data() as User;
 
           this.agendaItems.push({
-            id: docSnap.id,  // aqui o id da aula (para cancelar)
+            id: docSnap.id, // id da aula (para cancelar)
             nome: aluno?.['nome'] || 'Aluno',
-            status: 'Marcada',
+            status: `Marcada (${aula.horarioInicio} - ${aula.horarioFim})`,
             cor: 'warning',
             imagem: aluno?.['imagem'] || 'assets/fotos/default.png'
           });
@@ -184,22 +185,23 @@ export class AgendaPage implements OnInit {
 
     modal.onDidDismiss().then(result => {
       if (result.role === 'confirm') {
-        const { horario, status } = result.data;
-        this.marcarAula(professorId, horario, status);
+        const { horarioInicio, horarioFim, status } = result.data;
+        this.marcarAula(professorId, horarioInicio, horarioFim, status);
       }
     });
 
     await modal.present();
   }
 
-  async marcarAula(professorId: string, horario: string, status: string) {
+  async marcarAula(professorId: string, horarioInicio: string, horarioFim: string, status: string) {
     if (!this.selectedDate || !this.uid) return;
 
     try {
       await addDoc(collection(db, 'agenda'), {
         date: this.selectedDate,
-        horario: horario,
-        professorId: professorId,  
+        horarioInicio: horarioInicio,
+        horarioFim: horarioFim,
+        professorId: professorId,
         alunoId: this.uid,
         status: status
       });
