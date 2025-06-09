@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonList, IonItem, IonLabel, IonCard, IonCardHeader, IonCardContent, IonSpinner, IonDatetime, IonButton } from '@ionic/angular/standalone';
+import { IonContent, IonList, IonItem, IonLabel, IonCard, IonCardHeader, IonCardContent, IonSpinner, IonDatetime, IonButton } from '@ionic/angular/standalone';
 
 import { getDocs, query, where, collection } from 'firebase/firestore';
 import { db } from 'src/main';
@@ -23,7 +23,7 @@ interface Aula {
   styleUrls: ['./agendados.page.scss'],
   standalone: true,
   imports: [
-    IonContent, IonHeader, IonTitle, IonToolbar,
+    IonContent,
     IonList, IonItem, IonLabel, IonCard, IonCardHeader, IonCardContent, IonSpinner, IonDatetime, IonButton,
     CommonModule, FormsModule
   ]
