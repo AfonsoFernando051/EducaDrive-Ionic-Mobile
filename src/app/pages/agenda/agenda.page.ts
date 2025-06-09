@@ -11,9 +11,6 @@ import {
   IonButton,
   IonDatetime,
   IonCardHeader,
-  IonInput,
-  IonSelect,
-  IonSelectOption,
   ModalController
 } from '@ionic/angular/standalone';
 import { FormsModule } from '@angular/forms';
@@ -24,7 +21,7 @@ import { UserService } from '../../services/user.service';
 import { AgendamentoModalComponent } from 'src/app/agendamento-modal/agendamento-modal.component';
 
 interface User {
-  uid: string;
+  userID: string;
   nome: string;
   papel: 'aluno' | 'professor';
   imagem?: string;
@@ -68,9 +65,6 @@ export class AgendaPage implements OnInit {
 
   showDatePicker = false;
   selectedDate: string | null = null;
-  selectedHorario: string = '';
-  horarios: string[] = ['08:00', '09:00', '10:00', '11:00'];
-  status: string = 'Confirmado';
 
   agendaItems: {
     id: string;
@@ -120,9 +114,7 @@ export class AgendaPage implements OnInit {
 
     try {
       if (this.role === 'aluno') {
-        const allProfQuery = query(collection(db, 'user'), where('papel', '==', 'professor'));
-        const profSnap = await getDocs(allProfQuery);
-
+        // Professores ocupados nesse dia
         const bookedQuery = query(collection(db, 'agenda'),
           where('date', '==', this.selectedDate),
           where('status', '==', 'confirmado')
@@ -130,11 +122,17 @@ export class AgendaPage implements OnInit {
         const bookedSnap = await getDocs(bookedQuery);
         const busyProfessores = new Set(bookedSnap.docs.map(d => (d.data() as Aula)['professorId']));
 
+        // Professores disponíveis
+        const allProfQuery = query(collection(db, 'user'), where('papel', '==', 'professor'));
+        const profSnap = await getDocs(allProfQuery);
+
         profSnap.forEach(docSnap => {
           const data = docSnap.data() as User;
-          if (!busyProfessores.has(docSnap.id)) {
+
+          // Comparar com userID, não com docSnap.id
+          if (!busyProfessores.has(data['userID'])) {
             this.agendaItems.push({
-              id: docSnap.id,
+              id: data['userID'],  // salva userID no agenda
               nome: data['nome'],
               status: 'Disponível',
               cor: 'success',
@@ -143,6 +141,7 @@ export class AgendaPage implements OnInit {
           }
         });
       } else {
+        // Professor: aulas marcadas nesse dia
         const aulasQuery = query(collection(db, 'agenda'),
           where('date', '==', this.selectedDate),
           where('professorId', '==', this.uid),
@@ -153,11 +152,12 @@ export class AgendaPage implements OnInit {
         for (const docSnap of aulasSnap.docs) {
           const aula = docSnap.data() as Aula;
 
-          const alunoSnap = await getDocs(query(collection(db, 'user'), where('uid', '==', aula['alunoId'])));
+          // Buscar aluno correspondente
+          const alunoSnap = await getDocs(query(collection(db, 'user'), where('userID', '==', aula['alunoId'])));
           const aluno = alunoSnap.docs[0]?.data() as User;
 
           this.agendaItems.push({
-            id: docSnap.id,
+            id: docSnap.id,  // aqui o id da aula (para cancelar)
             nome: aluno?.['nome'] || 'Aluno',
             status: 'Marcada',
             cor: 'warning',
@@ -200,7 +200,7 @@ export class AgendaPage implements OnInit {
       await addDoc(collection(db, 'agenda'), {
         date: this.selectedDate,
         horario: horario,
-        professorId: professorId,
+        professorId: professorId,  // aqui já será o userID
         alunoId: this.uid,
         status: status
       });
@@ -231,13 +231,5 @@ export class AgendaPage implements OnInit {
     } catch (error: any) {
       alert('Erro ao sair: ' + error.message);
     }
-  }
-
-  salvarAgendamento() {
-    // Lógica futura ou mover para componente modal
-  }
-
-  fecharModal() {
-    this.modalCtrl.dismiss();
   }
 }
