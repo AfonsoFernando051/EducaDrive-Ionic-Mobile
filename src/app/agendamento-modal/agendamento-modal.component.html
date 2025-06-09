@@ -5,16 +5,14 @@
     </ion-card-header>
 
     <ion-card-content>
-      <!-- Data -->
       <ion-item>
         <ion-label position="stacked">Data</ion-label>
         <ion-input [value]="date" readonly></ion-input>
       </ion-item>
 
-      <!-- Horário Início -->
       <ion-item>
         <ion-label position="stacked">Horário Início</ion-label>
-        <ion-select [(ngModel)]="horarioInicio" placeholder="Selecione horário de início" *ngIf="disponibilidadeHorarios.length > 0">
+        <ion-select [(ngModel)]="horarioInicio" placeholder="Selecione" *ngIf="disponibilidadeHorarios.length > 0">
           <ion-select-option *ngFor="let hora of disponibilidadeHorarios" [value]="hora">
             {{ hora }}
           </ion-select-option>
@@ -24,34 +22,22 @@
         </ion-label>
       </ion-item>
 
-      <!-- Horário Fim -->
       <ion-item>
         <ion-label position="stacked">Horário Fim</ion-label>
-        <ion-select [(ngModel)]="horarioFim" placeholder="Selecione horário de fim" *ngIf="disponibilidadeHorarios.length > 0">
+        <ion-select [(ngModel)]="horarioFim" placeholder="Selecione" *ngIf="disponibilidadeHorarios.length > 0">
           <ion-select-option *ngFor="let hora of disponibilidadeHorarios" [value]="hora">
             {{ hora }}
           </ion-select-option>
         </ion-select>
       </ion-item>
 
-      <!-- Aluno -->
       <ion-item>
         <ion-label position="stacked">Aluno</ion-label>
         <ion-input [value]="alunoName" readonly></ion-input>
       </ion-item>
 
-      <!-- Situação -->
-      <ion-item>
-        <ion-label position="stacked">Situação</ion-label>
-        <ion-select [(ngModel)]="status">
-          <ion-select-option value="confirmado">Confirmado</ion-select-option>
-          <ion-select-option value="cancelado">Cancelado</ion-select-option>
-        </ion-select>
-      </ion-item>
-
-      <!-- Botões -->
       <ion-button expand="block" color="primary" class="ion-margin-top" (click)="confirmar()">
-        Confirmar
+        Solicitar Aula
       </ion-button>
 
       <ion-button expand="block" fill="clear" color="medium" (click)="cancelar()">

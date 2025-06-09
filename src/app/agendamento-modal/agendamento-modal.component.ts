@@ -24,7 +24,6 @@ export class AgendamentoModalComponent implements OnInit {
 
   horarioInicio: string = '';
   horarioFim: string = '';
-  status: string = 'confirmado';
   disponibilidadeHorarios: string[] = [];
 
   private modalCtrl = inject(ModalController);
@@ -74,7 +73,7 @@ export class AgendamentoModalComponent implements OnInit {
     }
 
     this.modalCtrl.dismiss(
-      { horarioInicio: this.horarioInicio, horarioFim: this.horarioFim, status: this.status },
+      { horarioInicio: this.horarioInicio, horarioFim: this.horarioFim },
       'confirm'
     );
   }
@@ -92,10 +91,10 @@ export class AgendamentoModalComponent implements OnInit {
   normalizeDia(dia: string): string {
     return dia
       .toLowerCase()
-      .replace('-feira', '')   // remove "feira"
-      .replace('feira', '')    // caso sem hífen
-      .trim()                  // remove espaços
-      .normalize('NFD')        // remove acentos
+      .replace('-feira', '')
+      .replace('feira', '')
+      .trim()
+      .normalize('NFD')
       .replace(/[\u0300-\u036f]/g, '');
   }
 

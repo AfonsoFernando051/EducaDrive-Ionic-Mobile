@@ -29,8 +29,8 @@ interface User {
 
 interface Aula {
   date: string;
-  horarioInicio: string;
-  horarioFim: string;
+  horarioInicio?: string;
+  horarioFim?: string;
   professorId: string;
   alunoId: string;
   status: string;
@@ -144,8 +144,7 @@ export class AgendaPage implements OnInit {
         // Professor: aulas marcadas nesse dia
         const aulasQuery = query(collection(db, 'agenda'),
           where('date', '==', this.selectedDate),
-          where('professorId', '==', this.uid),
-          where('status', '==', 'confirmado')
+          where('professorId', '==', this.uid)
         );
         const aulasSnap = await getDocs(aulasQuery);
 
@@ -157,10 +156,11 @@ export class AgendaPage implements OnInit {
           const aluno = alunoSnap.docs[0]?.data() as User;
 
           this.agendaItems.push({
-            id: docSnap.id, // id da aula (para cancelar)
+            id: docSnap.id,  // aqui o id da aula (para cancelar)
             nome: aluno?.['nome'] || 'Aluno',
-            status: `Marcada (${aula.horarioInicio} - ${aula.horarioFim})`,
-            cor: 'warning',
+            status: aula.status,
+            cor: aula.status === 'confirmado' ? 'success' :
+                 aula.status === 'cancelado' ? 'danger' : 'warning',
             imagem: aluno?.['imagem'] || 'assets/fotos/default.png'
           });
         }
@@ -185,15 +185,15 @@ export class AgendaPage implements OnInit {
 
     modal.onDidDismiss().then(result => {
       if (result.role === 'confirm') {
-        const { horarioInicio, horarioFim, status } = result.data;
-        this.marcarAula(professorId, horarioInicio, horarioFim, status);
+        const { horarioInicio, horarioFim } = result.data;
+        this.marcarAula(professorId, horarioInicio, horarioFim);
       }
     });
 
     await modal.present();
   }
 
-  async marcarAula(professorId: string, horarioInicio: string, horarioFim: string, status: string) {
+  async marcarAula(professorId: string, horarioInicio: string, horarioFim: string) {
     if (!this.selectedDate || !this.uid) return;
 
     try {
@@ -203,9 +203,9 @@ export class AgendaPage implements OnInit {
         horarioFim: horarioFim,
         professorId: professorId,
         alunoId: this.uid,
-        status: status
+        status: 'pendente'  // aluno não escolhe!
       });
-      alert('Aula marcada!');
+      alert('Aula solicitada! Aguarde confirmação do professor.');
       this.loadAgendaItems();
     } catch (error) {
       console.error('Erro ao marcar aula:', error);
