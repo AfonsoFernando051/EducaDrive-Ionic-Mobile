@@ -112,11 +112,9 @@ export class ConfigPage implements OnInit {
       const credential = EmailAuthProvider.credential(user.email, this.currentPassword);
 
       await reauthenticateWithCredential(user, credential);
-      console.log('Reautenticação bem-sucedida.');
 
       // 2️⃣ Atualizar senha
       await updatePassword(user, this.newPassword);
-      console.log('Senha atualizada com sucesso!');
 
       alert('Senha alterada com sucesso!');
 

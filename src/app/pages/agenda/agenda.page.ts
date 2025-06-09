@@ -129,10 +129,9 @@ export class AgendaPage implements OnInit {
         profSnap.forEach(docSnap => {
           const data = docSnap.data() as User;
 
-          // Comparar com userID, não com docSnap.id
           if (!busyProfessores.has(data['userID'])) {
             this.agendaItems.push({
-              id: data['userID'],  // salva userID no agenda
+              id: data['userID'],
               nome: data['nome'],
               status: 'Disponível',
               cor: 'success',
@@ -200,7 +199,7 @@ export class AgendaPage implements OnInit {
       await addDoc(collection(db, 'agenda'), {
         date: this.selectedDate,
         horario: horario,
-        professorId: professorId,  // aqui já será o userID
+        professorId: professorId,  
         alunoId: this.uid,
         status: status
       });

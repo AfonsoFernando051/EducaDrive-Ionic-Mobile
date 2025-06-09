@@ -10,13 +10,11 @@ export class AuthService {
 
   async login(email: string, senha: string): Promise<User> {
     const userCredential = await signInWithEmailAndPassword(auth, email, senha);
-    console.log('Usuário logado:', userCredential.user);
     return userCredential.user;
   }
 
   async logout(): Promise<void> {
     await signOut(auth);
-    console.log('Usuário deslogado');
   }
 
   getCurrentUser(): User | null {

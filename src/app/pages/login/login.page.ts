@@ -61,7 +61,6 @@ export class LoginPage implements OnInit {
     try {
       const userCredential = await this.authService.login(this.email, this.senha);
       const user = userCredential; // Firebase User
-      console.log('Usuário autenticado:', user);
 
       const profile = await this.getUserProfileByUid(user.uid);
       if (profile) {
