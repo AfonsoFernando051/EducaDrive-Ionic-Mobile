@@ -65,7 +65,7 @@ export class AgendaPage implements OnInit {
   isLoading = false;
 
   showDatePicker = false;
-  selectedDate: string | null = null;
+  selectedDate: string = new Date().toISOString().split('T')[0];  // Data de hoje como padrão
 
   agendaItems: {
     id: string;
@@ -90,6 +90,9 @@ export class AgendaPage implements OnInit {
       this.name = profile['name'] || 'Usuário';
       this.email = profile['email'] || '';
       this.photoURL = profile['photoURL'] || 'assets/photo/avatar.png';
+
+      // Já carrega a agenda da data atual
+      this.loadAgendaItems();
     } else {
       console.warn('Nenhum perfil encontrado.');
       this.router.navigate(['/login']);
@@ -144,7 +147,8 @@ export class AgendaPage implements OnInit {
         // Professor: aulas marcadas nesse dia
         const aulasQuery = query(collection(db, 'agenda'),
           where('date', '==', this.selectedDate),
-          where('professorId', '==', this.uid)
+          where('professorId', '==', this.uid),
+          where('status', '==', 'confirmado')
         );
         const aulasSnap = await getDocs(aulasQuery);
 
@@ -158,9 +162,8 @@ export class AgendaPage implements OnInit {
           this.agendaItems.push({
             id: docSnap.id,  // aqui o id da aula (para cancelar)
             nome: aluno?.['nome'] || 'Aluno',
-            status: aula.status,
-            cor: aula.status === 'confirmado' ? 'success' :
-                 aula.status === 'cancelado' ? 'danger' : 'warning',
+            status: 'Marcada',
+            cor: 'warning',
             imagem: aluno?.['imagem'] || 'assets/fotos/default.png'
           });
         }
@@ -203,9 +206,9 @@ export class AgendaPage implements OnInit {
         horarioFim: horarioFim,
         professorId: professorId,
         alunoId: this.uid,
-        status: 'pendente'  // aluno não escolhe!
+        status: 'confirmado'  // aluno não escolhe mais, fixo como 'confirmado'
       });
-      alert('Aula solicitada! Aguarde confirmação do professor.');
+      alert('Aula marcada!');
       this.loadAgendaItems();
     } catch (error) {
       console.error('Erro ao marcar aula:', error);
