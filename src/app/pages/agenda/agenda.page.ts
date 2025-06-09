@@ -15,7 +15,7 @@ import {
 } from '@ionic/angular/standalone';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
-import { collection, query, where, getDocs, addDoc, deleteDoc, doc } from 'firebase/firestore';
+import { collection, query, where, getDocs, addDoc, deleteDoc, doc, updateDoc } from 'firebase/firestore';
 import { db } from '../../../main';
 import { UserService } from '../../services/user.service';
 import { AgendamentoModalComponent } from 'src/app/agendamento-modal/agendamento-modal.component';
@@ -65,7 +65,7 @@ export class AgendaPage implements OnInit {
   isLoading = false;
 
   showDatePicker = false;
-  selectedDate: string = new Date().toISOString().split('T')[0];  // Data de hoje como padrão
+  selectedDate: string = new Date().toISOString().split('T')[0];
 
   agendaItems: {
     id: string;
@@ -73,6 +73,8 @@ export class AgendaPage implements OnInit {
     status: string;
     cor: string;
     imagem: string;
+    horarioInicio?: string;
+    horarioFim?: string;
   }[] = [];
 
   constructor(
@@ -90,8 +92,6 @@ export class AgendaPage implements OnInit {
       this.name = profile['name'] || 'Usuário';
       this.email = profile['email'] || '';
       this.photoURL = profile['photoURL'] || 'assets/photo/avatar.png';
-
-      // Já carrega a agenda da data atual
       this.loadAgendaItems();
     } else {
       console.warn('Nenhum perfil encontrado.');
@@ -118,7 +118,6 @@ export class AgendaPage implements OnInit {
 
     try {
       if (this.role === 'aluno') {
-        // Professores ocupados nesse dia
         const bookedQuery = query(collection(db, 'agenda'),
           where('date', '==', this.selectedDate),
           where('status', '==', 'confirmado')
@@ -126,7 +125,6 @@ export class AgendaPage implements OnInit {
         const bookedSnap = await getDocs(bookedQuery);
         const busyProfessores = new Set(bookedSnap.docs.map(d => (d.data() as Aula)['professorId']));
 
-        // Professores disponíveis
         const allProfQuery = query(collection(db, 'user'), where('papel', '==', 'professor'));
         const profSnap = await getDocs(allProfQuery);
 
@@ -144,27 +142,26 @@ export class AgendaPage implements OnInit {
           }
         });
       } else {
-        // Professor: aulas marcadas nesse dia
         const aulasQuery = query(collection(db, 'agenda'),
           where('date', '==', this.selectedDate),
-          where('professorId', '==', this.uid),
-          where('status', '==', 'confirmado')
+          where('professorId', '==', this.uid)
         );
         const aulasSnap = await getDocs(aulasQuery);
 
         for (const docSnap of aulasSnap.docs) {
           const aula = docSnap.data() as Aula;
 
-          // Buscar aluno correspondente
           const alunoSnap = await getDocs(query(collection(db, 'user'), where('userID', '==', aula['alunoId'])));
           const aluno = alunoSnap.docs[0]?.data() as User;
 
           this.agendaItems.push({
-            id: docSnap.id,  // aqui o id da aula (para cancelar)
+            id: docSnap.id,
             nome: aluno?.['nome'] || 'Aluno',
-            status: 'Marcada',
-            cor: 'warning',
-            imagem: aluno?.['imagem'] || 'assets/fotos/default.png'
+            status: aula.status,
+            cor: aula.status === 'confirmado' ? 'success' : 'warning',
+            imagem: aluno?.['imagem'] || 'assets/fotos/default.png',
+            horarioInicio: aula.horarioInicio,
+            horarioFim: aula.horarioFim
           });
         }
       }
@@ -206,13 +203,26 @@ export class AgendaPage implements OnInit {
         horarioFim: horarioFim,
         professorId: professorId,
         alunoId: this.uid,
-        status: 'confirmado'  // aluno não escolhe mais, fixo como 'confirmado'
+        status: 'pendente' // Aluno marca como pendente, professor confirma
       });
-      alert('Aula marcada!');
+      alert('Aula marcada! Aguarde confirmação do professor.');
       this.loadAgendaItems();
     } catch (error) {
       console.error('Erro ao marcar aula:', error);
       alert('Erro ao marcar aula.');
+    }
+  }
+
+  async confirmarAula(aulaId: string) {
+    try {
+      await updateDoc(doc(db, 'agenda', aulaId), {
+        status: 'confirmado'
+      });
+      alert('Aula confirmada!');
+      this.loadAgendaItems();
+    } catch (error) {
+      console.error('Erro ao confirmar aula:', error);
+      alert('Erro ao confirmar aula.');
     }
   }
 
